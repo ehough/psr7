@@ -1,7 +1,7 @@
 {
-    "name": "guzzlehttp/psr7",
+    "name": "ehough/psr7",
     "type": "library",
-    "description": "PSR-7 message implementation that also provides common utility methods",
+    "description": "PHP 5.3-compatible fork of guzzle/psr7",
     "keywords": ["request", "response", "message", "stream", "http", "uri", "url"],
     "license": "MIT",
     "authors": [
