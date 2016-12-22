@@ -519,7 +519,8 @@ class ServerRequestTest extends \PHPUnit_Framework_TestCase
 
     public function testNullAttribute()
     {
-        $request = (new ServerRequest('GET', '/'))->withAttribute('name', null);
+        $request = new ServerRequest('GET', '/');
+        $request = $request->withAttribute('name', null);
 
         $this->assertSame(array('name' => null), $request->getAttributes());
         $this->assertNull($request->getAttribute('name', 'different-default'));
