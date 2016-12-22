@@ -60,8 +60,17 @@ class UriTest extends \PHPUnit_Framework_TestCase
      */
     public function testFromParts($input)
     {
-        $uri = Uri::fromParts(parse_url($input));
-
+        if (strpos($input, '//') === 0 && version_compare(PHP_VERSION, '5.4.7', '<')) {
+            $input = "scheme:$input";
+            $parts = parse_url($input);
+            if (is_array($parts)) {
+                unset($parts['scheme']);
+            }
+            $input = substr($input, 7);
+        } else {
+            $parts = parse_url($input);
+        }
+        $uri = Uri::fromParts($parts);
         $this->assertSame($input, (string) $uri);
     }
 
