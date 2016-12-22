@@ -1,12 +1,12 @@
 <?php
-namespace GuzzleHttp\Tests\Psr7;
+namespace Hough\Tests\Psr7;
 
 use ReflectionProperty;
-use GuzzleHttp\Psr7\Stream;
-use GuzzleHttp\Psr7\UploadedFile;
+use Hough\Psr7\Stream;
+use Hough\Psr7\UploadedFile;
 
 /**
- * @covers GuzzleHttp\Psr7\UploadedFile
+ * @covers Hough\Psr7\UploadedFile
  */
 class UploadedFileTest extends \PHPUnit_Framework_TestCase
 {
@@ -156,7 +156,7 @@ class UploadedFileTest extends \PHPUnit_Framework_TestCase
 
     public function testSuccessful()
     {
-        $stream = \GuzzleHttp\Psr7\stream_for('Foo bar!');
+        $stream = \Hough\Psr7\stream_for('Foo bar!');
         $upload = new UploadedFile($stream, $stream->getSize(), UPLOAD_ERR_OK, 'filename.txt', 'text/plain');
 
         $this->assertEquals($stream->getSize(), $upload->getSize());
@@ -188,7 +188,7 @@ class UploadedFileTest extends \PHPUnit_Framework_TestCase
      */
     public function testMoveRaisesExceptionForInvalidPath($path)
     {
-        $stream = \GuzzleHttp\Psr7\stream_for('Foo bar!');
+        $stream = \Hough\Psr7\stream_for('Foo bar!');
         $upload = new UploadedFile($stream, 0, UPLOAD_ERR_OK);
 
         $this->cleanup[] = $path;
@@ -199,7 +199,7 @@ class UploadedFileTest extends \PHPUnit_Framework_TestCase
 
     public function testMoveCannotBeCalledMoreThanOnce()
     {
-        $stream = \GuzzleHttp\Psr7\stream_for('Foo bar!');
+        $stream = \Hough\Psr7\stream_for('Foo bar!');
         $upload = new UploadedFile($stream, 0, UPLOAD_ERR_OK);
 
         $this->cleanup[] = $to = tempnam(sys_get_temp_dir(), 'diac');
@@ -212,7 +212,7 @@ class UploadedFileTest extends \PHPUnit_Framework_TestCase
 
     public function testCannotRetrieveStreamAfterMove()
     {
-        $stream = \GuzzleHttp\Psr7\stream_for('Foo bar!');
+        $stream = \Hough\Psr7\stream_for('Foo bar!');
         $upload = new UploadedFile($stream, 0, UPLOAD_ERR_OK);
 
         $this->cleanup[] = $to = tempnam(sys_get_temp_dir(), 'diac');

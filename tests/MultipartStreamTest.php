@@ -1,8 +1,8 @@
 <?php
-namespace GuzzleHttp\Tests;
+namespace Hough\Tests;
 
-use GuzzleHttp\Psr7;
-use GuzzleHttp\Psr7\MultipartStream;
+use Hough\Psr7;
+use Hough\Psr7\MultipartStream;
 
 class MultipartStreamTest extends \PHPUnit_Framework_TestCase
 {

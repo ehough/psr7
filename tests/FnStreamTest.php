@@ -1,11 +1,11 @@
 <?php
-namespace GuzzleHttp\Tests\Psr7;
+namespace Hough\Tests\Psr7;
 
-use GuzzleHttp\Psr7;
-use GuzzleHttp\Psr7\FnStream;
+use Hough\Psr7;
+use Hough\Psr7\FnStream;
 
 /**
- * @covers GuzzleHttp\Psr7\FnStream
+ * @covers Hough\Psr7\FnStream
  */
 class FnStreamTest extends \PHPUnit_Framework_TestCase
 {

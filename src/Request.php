@@ -1,5 +1,5 @@
 <?php
-namespace GuzzleHttp\Psr7;
+namespace Hough\Psr7;
 
 use InvalidArgumentException;
 use Psr\Http\Message\RequestInterface;

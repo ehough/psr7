@@ -1,12 +1,12 @@
 <?php
-namespace GuzzleHttp\Tests\Psr7;
+namespace Hough\Tests\Psr7;
 
-use GuzzleHttp\Psr7;
-use GuzzleHttp\Psr7\Response;
+use Hough\Psr7;
+use Hough\Psr7\Response;
 
 /**
- * @covers GuzzleHttp\Psr7\MessageTrait
- * @covers GuzzleHttp\Psr7\Response
+ * @covers Hough\Psr7\MessageTrait
+ * @covers Hough\Psr7\Response
  */
 class ResponseTest extends \PHPUnit_Framework_TestCase
 {

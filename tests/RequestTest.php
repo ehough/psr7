@@ -1,12 +1,12 @@
 <?php
-namespace GuzzleHttp\Tests\Psr7;
+namespace Hough\Tests\Psr7;
 
-use GuzzleHttp\Psr7;
-use GuzzleHttp\Psr7\Request;
-use GuzzleHttp\Psr7\Uri;
+use Hough\Psr7;
+use Hough\Psr7\Request;
+use Hough\Psr7\Uri;
 
 /**
- * @covers GuzzleHttp\Psr7\Request
+ * @covers Hough\Psr7\Request
  */
 class RequestTest extends \PHPUnit_Framework_TestCase
 {

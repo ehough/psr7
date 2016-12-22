@@ -1,11 +1,11 @@
 <?php
-namespace GuzzleHttp\Tests\Psr7;
+namespace Hough\Tests\Psr7;
 
-use GuzzleHttp\Psr7\Uri;
-use GuzzleHttp\Psr7\UriResolver;
+use Hough\Psr7\Uri;
+use Hough\Psr7\UriResolver;
 
 /**
- * @covers GuzzleHttp\Psr7\UriResolver
+ * @covers Hough\Psr7\UriResolver
  */
 class UriResolverTest extends \PHPUnit_Framework_TestCase
 {

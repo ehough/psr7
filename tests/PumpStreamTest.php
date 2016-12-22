@@ -1,9 +1,9 @@
 <?php
-namespace GuzzleHttp\Tests\Psr7;
+namespace Hough\Tests\Psr7;
 
-use GuzzleHttp\Psr7\LimitStream;
-use GuzzleHttp\Psr7\PumpStream;
-use GuzzleHttp\Psr7;
+use Hough\Psr7\LimitStream;
+use Hough\Psr7\PumpStream;
+use Hough\Psr7;
 
 class PumpStreamTest extends \PHPUnit_Framework_TestCase
 {

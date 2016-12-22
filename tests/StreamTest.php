@@ -1,11 +1,11 @@
 <?php
-namespace GuzzleHttp\Tests\Psr7;
+namespace Hough\Tests\Psr7;
 
-use GuzzleHttp\Psr7\NoSeekStream;
-use GuzzleHttp\Psr7\Stream;
+use Hough\Psr7\NoSeekStream;
+use Hough\Psr7\Stream;
 
 /**
- * @covers GuzzleHttp\Psr7\Stream
+ * @covers Hough\Psr7\Stream
  */
 class StreamTest extends \PHPUnit_Framework_TestCase
 {
@@ -157,7 +157,7 @@ class StreamTest extends \PHPUnit_Framework_TestCase
 
     public function testDoesNotThrowInToString()
     {
-        $s = \GuzzleHttp\Psr7\stream_for('foo');
+        $s = \Hough\Psr7\stream_for('foo');
         $s = new NoSeekStream($s);
         $this->assertEquals('foo', (string) $s);
     }
@@ -214,9 +214,9 @@ class StreamTest extends \PHPUnit_Framework_TestCase
     }
 }
 
-namespace GuzzleHttp\Psr7;
+namespace Hough\Psr7;
 
-use GuzzleHttp\Tests\Psr7\StreamTest;
+use Hough\Tests\Psr7\StreamTest;
 
 function fread($handle, $length)
 {

@@ -1,8 +1,8 @@
 <?php
-namespace GuzzleHttp\Tests\Psr7;
+namespace Hough\Tests\Psr7;
 
-use GuzzleHttp\Psr7;
-use GuzzleHttp\Psr7\InflateStream;
+use Hough\Psr7;
+use Hough\Psr7\InflateStream;
 
 class InflateStreamtest extends \PHPUnit_Framework_TestCase
 {
