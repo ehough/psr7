@@ -60,9 +60,12 @@ class MultipartStream extends StreamDecorator
     /**
      * Create the aggregate stream that will be used to upload the POST data
      */
-    protected function createStream(array $elements)
+    protected function createStream()
     {
         $stream = new AppendStream();
+
+        $elements = func_get_args();
+        $elements = $elements[0];
 
         foreach ($elements as $element) {
             $this->addElement($stream, $element);

@@ -6,19 +6,19 @@ use Psr\Http\Message\StreamInterface;
 /**
  * Trait implementing functionality common to requests and responses.
  */
-trait MessageTrait
+class Message
 {
     /** @var array Map of all registered headers, as original name => array of values */
-    private $headers = array();
+    protected $headers = array();
 
     /** @var array Map of lowercase header name => original name at registration */
-    private $headerNames  = array();
+    protected $headerNames  = array();
 
     /** @var string */
-    private $protocol = '1.1';
+    protected $protocol = '1.1';
 
     /** @var StreamInterface */
-    private $stream;
+    protected $stream;
 
     public function getProtocolVersion()
     {
@@ -67,7 +67,7 @@ trait MessageTrait
     public function withHeader($header, $value)
     {
         if (!is_array($value)) {
-            $value = [$value];
+            $value = array($value);
         }
 
         $value = $this->trimHeaderValues($value);
@@ -86,7 +86,7 @@ trait MessageTrait
     public function withAddedHeader($header, $value)
     {
         if (!is_array($value)) {
-            $value = [$value];
+            $value = array($value);
         }
 
         $value = $this->trimHeaderValues($value);
@@ -140,12 +140,12 @@ trait MessageTrait
         return $new;
     }
 
-    private function setHeaders(array $headers)
+    protected function setHeaders(array $headers)
     {
         $this->headerNames = $this->headers = array();
         foreach ($headers as $header => $value) {
             if (!is_array($value)) {
-                $value = [$value];
+                $value = array($value);
             }
 
             $value = $this->trimHeaderValues($value);

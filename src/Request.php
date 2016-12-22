@@ -9,10 +9,8 @@ use Psr\Http\Message\UriInterface;
 /**
  * PSR-7 request implementation.
  */
-class Request implements RequestInterface
+class Request extends Message implements RequestInterface
 {
-    use MessageTrait;
-
     /** @var string */
     private $method;
 
