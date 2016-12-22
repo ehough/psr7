@@ -15,17 +15,18 @@ class FnStreamTest extends \PHPUnit_Framework_TestCase
      */
     public function testThrowsWhenNotImplemented()
     {
-        (new FnStream([]))->seek(1);
+        $fnStream = new FnStream(array());
+        $fnStream->seek(1);
     }
 
     public function testProxiesToFunction()
     {
-        $s = new FnStream([
+        $s = new FnStream(array(
             'read' => function ($len) {
                 $this->assertEquals(3, $len);
                 return 'foo';
             }
-        ]);
+        ));
 
         $this->assertEquals('foo', $s->read(3));
     }
@@ -33,25 +34,25 @@ class FnStreamTest extends \PHPUnit_Framework_TestCase
     public function testCanCloseOnDestruct()
     {
         $called = false;
-        $s = new FnStream([
+        $s = new FnStream(array(
             'close' => function () use (&$called) {
                 $called = true;
             }
-        ]);
+        ));
         unset($s);
         $this->assertTrue($called);
     }
 
     public function testDoesNotRequireClose()
     {
-        $s = new FnStream([]);
+        $s = new FnStream(array());
         unset($s);
     }
 
     public function testDecoratesStream()
     {
         $a = Psr7\stream_for('foo');
-        $b = FnStream::decorate($a, []);
+        $b = FnStream::decorate($a, array());
         $this->assertEquals(3, $b->getSize());
         $this->assertEquals($b->isWritable(), true);
         $this->assertEquals($b->isReadable(), true);
@@ -78,12 +79,12 @@ class FnStreamTest extends \PHPUnit_Framework_TestCase
     {
         $called = false;
         $a = Psr7\stream_for('foo');
-        $b = FnStream::decorate($a, [
+        $b = FnStream::decorate($a, array(
             'read' => function ($len) use (&$called, $a) {
                 $called = true;
                 return $a->read($len);
             }
-        ]);
+        ));
         $this->assertEquals('foo', $b->read(3));
         $this->assertTrue($called);
     }

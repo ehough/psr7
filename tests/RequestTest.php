@@ -33,21 +33,21 @@ class RequestTest extends \PHPUnit_Framework_TestCase
 
     public function testCanConstructWithBody()
     {
-        $r = new Request('GET', '/', [], 'baz');
+        $r = new Request('GET', '/', array(), 'baz');
         $this->assertInstanceOf('Psr\Http\Message\StreamInterface', $r->getBody());
         $this->assertEquals('baz', (string) $r->getBody());
     }
 
     public function testNullBody()
     {
-        $r = new Request('GET', '/', [], null);
+        $r = new Request('GET', '/', array(), null);
         $this->assertInstanceOf('Psr\Http\Message\StreamInterface', $r->getBody());
         $this->assertSame('', (string) $r->getBody());
     }
 
     public function testFalseyBody()
     {
-        $r = new Request('GET', '/', [], '0');
+        $r = new Request('GET', '/', array(), '0');
         $this->assertInstanceOf('Psr\Http\Message\StreamInterface', $r->getBody());
         $this->assertSame('0', (string) $r->getBody());
     }
@@ -55,14 +55,14 @@ class RequestTest extends \PHPUnit_Framework_TestCase
     public function testConstructorDoesNotReadStreamBody()
     {
         $streamIsRead = false;
-        $body = Psr7\FnStream::decorate(Psr7\stream_for(''), [
+        $body = Psr7\FnStream::decorate(Psr7\stream_for(''), array(
             '__toString' => function () use (&$streamIsRead) {
                 $streamIsRead = true;
                 return '';
             }
-        ]);
+        ));
 
-        $r = new Request('GET', '/', [], $body);
+        $r = new Request('GET', '/', array(), $body);
         $this->assertFalse($streamIsRead);
         $this->assertSame($body, $r->getBody());
     }
@@ -138,26 +138,26 @@ class RequestTest extends \PHPUnit_Framework_TestCase
 
     public function testHostIsAddedFirst()
     {
-        $r = new Request('GET', 'http://foo.com/baz?bar=bam', ['Foo' => 'Bar']);
-        $this->assertEquals([
-            'Host' => ['foo.com'],
-            'Foo'  => ['Bar']
-        ], $r->getHeaders());
+        $r = new Request('GET', 'http://foo.com/baz?bar=bam', array('Foo' => 'Bar'));
+        $this->assertEquals(array(
+            'Host' => array('foo.com'),
+            'Foo'  => array('Bar')
+        ), $r->getHeaders());
     }
 
     public function testCanGetHeaderAsCsv()
     {
-        $r = new Request('GET', 'http://foo.com/baz?bar=bam', [
-            'Foo' => ['a', 'b', 'c']
-        ]);
+        $r = new Request('GET', 'http://foo.com/baz?bar=bam', array(
+            'Foo' => array('a', 'b', 'c')
+        ));
         $this->assertEquals('a, b, c', $r->getHeaderLine('Foo'));
         $this->assertEquals('', $r->getHeaderLine('Bar'));
     }
 
     public function testHostIsNotOverwrittenWhenPreservingHost()
     {
-        $r = new Request('GET', 'http://foo.com/baz?bar=bam', ['Host' => 'a.com']);
-        $this->assertEquals(['Host' => ['a.com']], $r->getHeaders());
+        $r = new Request('GET', 'http://foo.com/baz?bar=bam', array('Host' => 'a.com'));
+        $this->assertEquals(array('Host' => array('a.com')), $r->getHeaders());
         $r2 = $r->withUri(new Uri('http://www.foo.com/bar'), true);
         $this->assertEquals('a.com', $r2->getHeaderLine('Host'));
     }
@@ -165,18 +165,18 @@ class RequestTest extends \PHPUnit_Framework_TestCase
     public function testOverridesHostWithUri()
     {
         $r = new Request('GET', 'http://foo.com/baz?bar=bam');
-        $this->assertEquals(['Host' => ['foo.com']], $r->getHeaders());
+        $this->assertEquals(array('Host' => array('foo.com')), $r->getHeaders());
         $r2 = $r->withUri(new Uri('http://www.baz.com/bar'));
         $this->assertEquals('www.baz.com', $r2->getHeaderLine('Host'));
     }
 
     public function testAggregatesHeaders()
     {
-        $r = new Request('GET', '', [
+        $r = new Request('GET', '', array(
             'ZOO' => 'zoobar',
-            'zoo' => ['foobar', 'zoobar']
-        ]);
-        $this->assertEquals(['ZOO' => ['zoobar', 'foobar', 'zoobar']], $r->getHeaders());
+            'zoo' => array('foobar', 'zoobar')
+        ));
+        $this->assertEquals(array('ZOO' => array('zoobar', 'foobar', 'zoobar')), $r->getHeaders());
         $this->assertEquals('zoobar, foobar, zoobar', $r->getHeaderLine('zoo'));
     }
 

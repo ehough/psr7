@@ -65,9 +65,9 @@ class CachingStreamTest extends \PHPUnit_Framework_TestCase
     public function testCanUseSeekEndWithUnknownSize()
     {
         $baseStream = Psr7\stream_for('testing');
-        $decorated = Psr7\FnStream::decorate($baseStream, [
+        $decorated = Psr7\FnStream::decorate($baseStream, array(
             'getSize' => function () { return null; }
-        ]);
+        ));
         $cached = new CachingStream($decorated);
         $cached->seek(-1, SEEK_END);
         $this->assertEquals('g', $cached->read(1));
@@ -107,8 +107,8 @@ class CachingStreamTest extends \PHPUnit_Framework_TestCase
         fseek($stream, 0);
 
         $this->decorated = $this->getMockBuilder('\GuzzleHttp\Psr7\Stream')
-            ->setConstructorArgs([$stream])
-            ->setMethods(['read'])
+            ->setConstructorArgs(array($stream))
+            ->setMethods(array('read'))
             ->getMock();
 
         $this->decorated->expects($this->exactly(2))

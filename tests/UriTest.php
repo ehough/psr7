@@ -25,8 +25,8 @@ class UriTest extends \PHPUnit_Framework_TestCase
 
     public function testCanTransformAndRetrievePartsIndividually()
     {
-        $uri = (new Uri())
-            ->withScheme('https')
+        $uri = new Uri();
+        $uri = $uri->withScheme('https')
             ->withUserInfo('user', 'pass')
             ->withHost('example.com')
             ->withPort(8080)
@@ -67,31 +67,31 @@ class UriTest extends \PHPUnit_Framework_TestCase
 
     public function getValidUris()
     {
-        return [
-            ['urn:path-rootless'],
-            ['urn:path:with:colon'],
-            ['urn:/path-absolute'],
-            ['urn:/'],
+        return array(
+            array('urn:path-rootless'),
+            array('urn:path:with:colon'),
+            array('urn:/path-absolute'),
+            array('urn:/'),
             // only scheme with empty path
-            ['urn:'],
+            array('urn:'),
             // only path
-            ['/'],
-            ['relative/'],
-            ['0'],
+            array('/'),
+            array('relative/'),
+            array('0'),
             // same document reference
-            [''],
+            array(''),
             // network path without scheme
-            ['//example.org'],
-            ['//example.org/'],
-            ['//example.org?q#h'],
+            array('//example.org'),
+            array('//example.org/'),
+            array('//example.org?q#h'),
             // only query
-            ['?q'],
-            ['?q=abc&foo=bar'],
+            array('?q'),
+            array('?q=abc&foo=bar'),
             // only fragment
-            ['#fragment'],
+            array('#fragment'),
             // dot segments are not removed automatically
-            ['./foo/../bar'],
-        ];
+            array('./foo/../bar'),
+        );
     }
 
     /**
@@ -106,13 +106,13 @@ class UriTest extends \PHPUnit_Framework_TestCase
 
     public function getInvalidUris()
     {
-        return [
+        return array(
             // parse_url() requires the host component which makes sense for http(s)
             // but not when the scheme is not known or different. So '//' or '///' is
             // currently invalid as well but should not according to RFC 3986.
-            ['http://'],
-            ['urn://host:with:colon'], // host cannot contain ":"
-        ];
+            array('http://'),
+            array('urn://host:with:colon'), // host cannot contain ":"
+        );
     }
 
     /**
@@ -121,7 +121,8 @@ class UriTest extends \PHPUnit_Framework_TestCase
      */
     public function testPortMustBeValid()
     {
-        (new Uri())->withPort(100000);
+        $uri = new Uri();
+        $uri->withPort(100000);
     }
 
     /**
@@ -130,7 +131,8 @@ class UriTest extends \PHPUnit_Framework_TestCase
      */
     public function testWithPortCannotBeZero()
     {
-        (new Uri())->withPort(0);
+        $uri = new Uri();
+        $uri->withPort(0);
     }
 
     /**
@@ -147,7 +149,8 @@ class UriTest extends \PHPUnit_Framework_TestCase
      */
     public function testSchemeMustHaveCorrectType()
     {
-        (new Uri())->withScheme([]);
+        $uri = new Uri();
+        $uri->withScheme(array());
     }
 
     /**
@@ -155,7 +158,8 @@ class UriTest extends \PHPUnit_Framework_TestCase
      */
     public function testHostMustHaveCorrectType()
     {
-        (new Uri())->withHost([]);
+        $uri = new Uri();
+        $uri->withHost(array());
     }
 
     /**
@@ -163,7 +167,8 @@ class UriTest extends \PHPUnit_Framework_TestCase
      */
     public function testPathMustHaveCorrectType()
     {
-        (new Uri())->withPath([]);
+        $uri = new Uri();
+        $uri->withPath(array());
     }
 
     /**
@@ -171,7 +176,8 @@ class UriTest extends \PHPUnit_Framework_TestCase
      */
     public function testQueryMustHaveCorrectType()
     {
-        (new Uri())->withQuery([]);
+        $uri = new Uri();
+        $uri->withQuery(array());
     }
 
     /**
@@ -179,7 +185,8 @@ class UriTest extends \PHPUnit_Framework_TestCase
      */
     public function testFragmentMustHaveCorrectType()
     {
-        (new Uri())->withFragment([]);
+        $uri = new Uri();
+        $uri->withFragment(array());
     }
 
     public function testCanParseFalseyUriParts()
@@ -198,8 +205,8 @@ class UriTest extends \PHPUnit_Framework_TestCase
 
     public function testCanConstructFalseyUriParts()
     {
-        $uri = (new Uri())
-            ->withScheme('0')
+        $uri = new Uri();
+        $uri = $uri->withScheme('0')
             ->withUserInfo('0', '0')
             ->withHost('0')
             ->withPath('/0')
@@ -230,23 +237,23 @@ class UriTest extends \PHPUnit_Framework_TestCase
 
     public function getPortTestCases()
     {
-        return [
-            ['http', null, true],
-            ['http', 80, true],
-            ['http', 8080, false],
-            ['https', null, true],
-            ['https', 443, true],
-            ['https', 444, false],
-            ['ftp', 21, true],
-            ['gopher', 70, true],
-            ['nntp', 119, true],
-            ['news', 119, true],
-            ['telnet', 23, true],
-            ['tn3270', 23, true],
-            ['imap', 143, true],
-            ['pop', 110, true],
-            ['ldap', 389, true],
-        ];
+        return array(
+            array('http', null, true),
+            array('http', 80, true),
+            array('http', 8080, false),
+            array('https', null, true),
+            array('https', 443, true),
+            array('https', 444, false),
+            array('ftp', 21, true),
+            array('gopher', 70, true),
+            array('nntp', 119, true),
+            array('news', 119, true),
+            array('telnet', 23, true),
+            array('tn3270', 23, true),
+            array('imap', 143, true),
+            array('pop', 110, true),
+            array('ldap', 389, true),
+        );
     }
 
     public function testIsAbsolute()
@@ -337,7 +344,8 @@ class UriTest extends \PHPUnit_Framework_TestCase
 
     public function testWithoutQueryValueRemovesAllSameKeys()
     {
-        $uri = (new Uri())->withQuery('a=b&c=d&a=e');
+        $uri = new Uri();
+        $uri = $uri->withQuery('a=b&c=d&a=e');
         $uri = Uri::withoutQueryValue($uri, 'a');
         $this->assertSame('c=d', $uri->getQuery());
     }
@@ -365,11 +373,13 @@ class UriTest extends \PHPUnit_Framework_TestCase
     {
         // It also tests that the case of the percent-encoding does not matter,
         // i.e. both lowercase "%3d" and uppercase "%5E" can be removed.
-        $uri = (new Uri())->withQuery('E%3dmc%5E2=einstein&foo=bar');
+        $uri = new Uri();
+        $uri = $uri->withQuery('E%3dmc%5E2=einstein&foo=bar');
         $uri = Uri::withoutQueryValue($uri, 'E=mc^2');
         $this->assertSame('foo=bar', $uri->getQuery(), 'Handles key in decoded form');
 
-        $uri = (new Uri())->withQuery('E%3dmc%5E2=einstein&foo=bar');
+        $uri = new Uri();
+        $uri = $uri->withQuery('E%3dmc%5E2=einstein&foo=bar');
         $uri = Uri::withoutQueryValue($uri, 'E%3Dmc%5e2');
         $this->assertSame('foo=bar', $uri->getQuery(), 'Handles key in encoded form');
     }
@@ -381,7 +391,8 @@ class UriTest extends \PHPUnit_Framework_TestCase
         $this->assertSame('http', $uri->getScheme());
         $this->assertSame('http://example.com', (string) $uri);
 
-        $uri = (new Uri('//example.com'))->withScheme('HTTP');
+        $uri = new Uri('//example.com');
+        $uri = $uri->withScheme('HTTP');
 
         $this->assertSame('http', $uri->getScheme());
         $this->assertSame('http://example.com', (string) $uri);
@@ -394,7 +405,8 @@ class UriTest extends \PHPUnit_Framework_TestCase
         $this->assertSame('example.com', $uri->getHost());
         $this->assertSame('//example.com', (string) $uri);
 
-        $uri = (new Uri())->withHost('eXaMpLe.CoM');
+        $uri = new Uri();
+        $uri = $uri->withHost('eXaMpLe.CoM');
 
         $this->assertSame('example.com', $uri->getHost());
         $this->assertSame('//example.com', (string) $uri);
@@ -407,7 +419,8 @@ class UriTest extends \PHPUnit_Framework_TestCase
         $this->assertNull($uri->getPort());
         $this->assertSame('example.com', $uri->getAuthority());
 
-        $uri = (new Uri('https://example.com'))->withPort(443);
+        $uri = new Uri('https://example.com');
+        $uri = $uri->withPort(443);
         $this->assertNull($uri->getPort());
         $this->assertSame('example.com', $uri->getAuthority());
 
@@ -416,14 +429,16 @@ class UriTest extends \PHPUnit_Framework_TestCase
         $this->assertNull($uri->getPort());
         $this->assertSame('example.com', $uri->getAuthority());
 
-        $uri = (new Uri('http://example.com'))->withPort(80);
+        $uri = new Uri('http://example.com');
+        $uri = $uri->withPort(80);
         $this->assertNull($uri->getPort());
         $this->assertSame('example.com', $uri->getAuthority());
     }
 
     public function testPortIsReturnedIfSchemeUnknown()
     {
-        $uri = (new Uri('//example.com'))->withPort(80);
+        $uri = new Uri('//example.com');
+        $uri = $uri->withPort(80);
 
         $this->assertSame(80, $uri->getPort());
         $this->assertSame('example.com:80', $uri->getAuthority());
@@ -441,7 +456,8 @@ class UriTest extends \PHPUnit_Framework_TestCase
 
     public function testPortPassedAsStringIsCastedToInt()
     {
-        $uri = (new Uri('//example.com'))->withPort('8080');
+        $uri = new Uri('//example.com');
+        $uri = $uri->withPort('8080');
 
         $this->assertSame(8080, $uri->getPort(), 'Port is returned as integer');
         $this->assertSame('example.com:8080', $uri->getAuthority());
@@ -449,7 +465,8 @@ class UriTest extends \PHPUnit_Framework_TestCase
 
     public function testPortCanBeRemoved()
     {
-        $uri = (new Uri('http://example.com:8080'))->withPort(null);
+        $uri = new Uri('http://example.com:8080');
+        $uri = $uri->withPort(null);
 
         $this->assertNull($uri->getPort());
         $this->assertSame('http://example.com', (string) $uri);
@@ -461,7 +478,8 @@ class UriTest extends \PHPUnit_Framework_TestCase
      */
     public function testAuthorityWithUserInfoOrPortButWithoutHost()
     {
-        $uri = (new Uri())->withUserInfo('user', 'pass');
+        $uri = new Uri();
+        $uri = $uri->withUserInfo('user', 'pass');
 
         $this->assertSame('user:pass', $uri->getUserInfo());
         $this->assertSame('user:pass@', $uri->getAuthority());
@@ -477,7 +495,8 @@ class UriTest extends \PHPUnit_Framework_TestCase
 
     public function testHostInHttpUriDefaultsToLocalhost()
     {
-        $uri = (new Uri())->withScheme('http');
+        $uri = new Uri();
+        $uri = $uri->withScheme('http');
 
         $this->assertSame('localhost', $uri->getHost());
         $this->assertSame('localhost', $uri->getAuthority());
@@ -486,7 +505,8 @@ class UriTest extends \PHPUnit_Framework_TestCase
 
     public function testHostInHttpsUriDefaultsToLocalhost()
     {
-        $uri = (new Uri())->withScheme('https');
+        $uri = new Uri();
+        $uri = $uri->withScheme('https');
 
         $this->assertSame('localhost', $uri->getHost());
         $this->assertSame('localhost', $uri->getAuthority());
@@ -506,22 +526,22 @@ class UriTest extends \PHPUnit_Framework_TestCase
     {
         $unreserved = 'a-zA-Z0-9.-_~!$&\'()*+,;=:@';
 
-        return [
+        return array(
             // Percent encode spaces
-            ['/pa th?q=va lue#frag ment', '/pa%20th', 'q=va%20lue', 'frag%20ment', '/pa%20th?q=va%20lue#frag%20ment'],
+            array('/pa th?q=va lue#frag ment', '/pa%20th', 'q=va%20lue', 'frag%20ment', '/pa%20th?q=va%20lue#frag%20ment'),
             // Percent encode multibyte
-            ['/€?€#€', '/%E2%82%AC', '%E2%82%AC', '%E2%82%AC', '/%E2%82%AC?%E2%82%AC#%E2%82%AC'],
+            array('/€?€#€', '/%E2%82%AC', '%E2%82%AC', '%E2%82%AC', '/%E2%82%AC?%E2%82%AC#%E2%82%AC'),
             // Don't encode something that's already encoded
-            ['/pa%20th?q=va%20lue#frag%20ment', '/pa%20th', 'q=va%20lue', 'frag%20ment', '/pa%20th?q=va%20lue#frag%20ment'],
+            array('/pa%20th?q=va%20lue#frag%20ment', '/pa%20th', 'q=va%20lue', 'frag%20ment', '/pa%20th?q=va%20lue#frag%20ment'),
             // Percent encode invalid percent encodings
-            ['/pa%2-th?q=va%2-lue#frag%2-ment', '/pa%252-th', 'q=va%252-lue', 'frag%252-ment', '/pa%252-th?q=va%252-lue#frag%252-ment'],
+            array('/pa%2-th?q=va%2-lue#frag%2-ment', '/pa%252-th', 'q=va%252-lue', 'frag%252-ment', '/pa%252-th?q=va%252-lue#frag%252-ment'),
             // Don't encode path segments
-            ['/pa/th//two?q=va/lue#frag/ment', '/pa/th//two', 'q=va/lue', 'frag/ment', '/pa/th//two?q=va/lue#frag/ment'],
+            array('/pa/th//two?q=va/lue#frag/ment', '/pa/th//two', 'q=va/lue', 'frag/ment', '/pa/th//two?q=va/lue#frag/ment'),
             // Don't encode unreserved chars or sub-delimiters
-            ["/$unreserved?$unreserved#$unreserved", "/$unreserved", $unreserved, $unreserved, "/$unreserved?$unreserved#$unreserved"],
+            array("/$unreserved?$unreserved#$unreserved", "/$unreserved", $unreserved, $unreserved, "/$unreserved?$unreserved#$unreserved"),
             // Encoded unreserved chars are not decoded
-            ['/p%61th?q=v%61lue#fr%61gment', '/p%61th', 'q=v%61lue', 'fr%61gment', '/p%61th?q=v%61lue#fr%61gment'],
-        ];
+            array('/p%61th?q=v%61lue#fr%61gment', '/p%61th', 'q=v%61lue', 'fr%61gment', '/p%61th?q=v%61lue#fr%61gment'),
+        );
     }
 
     /**
@@ -538,7 +558,8 @@ class UriTest extends \PHPUnit_Framework_TestCase
 
     public function testWithPathEncodesProperly()
     {
-        $uri = (new Uri())->withPath('/baz?#€/b%61r');
+        $uri = new Uri();
+        $uri = $uri->withPath('/baz?#€/b%61r');
         // Query and fragment delimiters and multibyte chars are encoded.
         $this->assertSame('/baz%3F%23%E2%82%AC/b%61r', $uri->getPath());
         $this->assertSame('/baz%3F%23%E2%82%AC/b%61r', (string) $uri);
@@ -546,7 +567,8 @@ class UriTest extends \PHPUnit_Framework_TestCase
 
     public function testWithQueryEncodesProperly()
     {
-        $uri = (new Uri())->withQuery('?=#&€=/&b%61r');
+        $uri = new Uri();
+        $uri = $uri->withQuery('?=#&€=/&b%61r');
         // A query starting with a "?" is valid and must not be magically removed. Otherwise it would be impossible to
         // construct such an URI. Also the "?" and "/" does not need to be encoded in the query.
         $this->assertSame('?=%23&%E2%82%AC=/&b%61r', $uri->getQuery());
@@ -555,7 +577,8 @@ class UriTest extends \PHPUnit_Framework_TestCase
 
     public function testWithFragmentEncodesProperly()
     {
-        $uri = (new Uri())->withFragment('#€?/b%61r');
+        $uri = new Uri();
+        $uri = $uri->withFragment('#€?/b%61r');
         // A fragment starting with a "#" is valid and must not be magically removed. Otherwise it would be impossible to
         // construct such an URI. Also the "?" and "/" does not need to be encoded in the fragment.
         $this->assertSame('%23%E2%82%AC?/b%61r', $uri->getFragment());
@@ -564,7 +587,8 @@ class UriTest extends \PHPUnit_Framework_TestCase
 
     public function testAllowsForRelativeUri()
     {
-        $uri = (new Uri)->withPath('foo');
+        $uri = new Uri();
+        $uri = $uri->withPath('foo');
         $this->assertSame('foo', $uri->getPath());
         $this->assertSame('foo', (string) $uri);
     }
@@ -575,8 +599,9 @@ class UriTest extends \PHPUnit_Framework_TestCase
      */
     public function testRelativePathAndAuhorityIsInvalid()
     {
+        $uri = new Uri();
         // concatenating a relative path with a host doesn't work: "//example.comfoo" would be wrong
-        (new Uri)->withPath('foo')->withHost('example.com');
+        $uri->withPath('foo')->withHost('example.com');
     }
 
     /**
@@ -585,8 +610,9 @@ class UriTest extends \PHPUnit_Framework_TestCase
      */
     public function testPathStartingWithTwoSlashesAndNoAuthorityIsInvalid()
     {
+        $uri = new Uri();
         // URI "//foo" would be interpreted as network reference and thus change the original path to the host
-        (new Uri)->withPath('//foo');
+        $uri->withPath('//foo');
     }
 
     public function testPathStartingWithTwoSlashes()
@@ -606,16 +632,19 @@ class UriTest extends \PHPUnit_Framework_TestCase
      */
     public function testRelativeUriWithPathBeginngWithColonSegmentIsInvalid()
     {
-        (new Uri)->withPath('mailto:foo');
+        $uri = new Uri();
+        $uri->withPath('mailto:foo');
     }
 
     public function testRelativeUriWithPathHavingColonSegment()
     {
-        $uri = (new Uri('urn:/mailto:foo'))->withScheme('');
+        $uri = new Uri('urn:/mailto:foo');
+        $uri = $uri->withScheme('');
         $this->assertSame('/mailto:foo', $uri->getPath());
 
         $this->setExpectedException('\InvalidArgumentException');
-        (new Uri('urn:mailto:foo'))->withScheme('');
+        $uri = new Uri('urn:mailto:foo');
+        $uri->withScheme('');
     }
 
     public function testDefaultReturnValuesOfGetters()
