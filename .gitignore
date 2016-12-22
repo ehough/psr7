@@ -2,3 +2,5 @@ artifacts/
 vendor/
 composer.lock
 phpunit.xml
+.idea
+.DS_STORE

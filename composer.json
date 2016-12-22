@@ -13,10 +13,15 @@
         {
             "name": "Tobias Schultze",
             "homepage": "https://github.com/Tobion"
+        },
+        {
+            "name": "Eric Hough",
+            "email": "eric@tubepress.com",
+            "homepage": "https://github.com/ehough"
         }
     ],
     "require": {
-        "php": ">=5.4.0",
+        "php": ">=5.3.29",
         "psr/http-message": "~1.0"
     },
     "require-dev": {
