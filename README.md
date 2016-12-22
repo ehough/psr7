@@ -36,7 +36,7 @@ use Hough\Psr7;
 
 $a = Psr7\stream_for('abc, ');
 $b = Psr7\stream_for('123.');
-$composed = new Psr7\AppendStream([$a, $b]);
+$composed = new Psr7\AppendStream(array($a, $b));
 
 $composed->addStream(Psr7\stream_for(' Above all listen to me'));
 
@@ -124,13 +124,13 @@ to create a concrete class for a simple extension point.
 use Hough\Psr7;
 
 $stream = Psr7\stream_for('hi');
-$fnStream = Psr7\FnStream::decorate($stream, [
+$fnStream = Psr7\FnStream::decorate($stream, array(
     'rewind' => function () use ($stream) {
         echo 'About to rewind - ';
         $stream->rewind();
         echo 'rewound!';
     }
-]);
+));
 
 $fnStream->rewind();
 // Outputs: About to rewind - rewound!
@@ -237,10 +237,10 @@ false when there is no more data to read.
 
 ## Implementing stream decorators
 
-Creating a stream decorator is very easy thanks to the
-`Hough\Psr7\StreamDecoratorTrait`. This trait provides methods that
+Creating a stream is very easy thanks to the
+`Hough\Psr7\StreamDecorator`. This class provides methods that
 implement `Psr\Http\Message\StreamInterface` by proxying to an underlying
-stream. Just `use` the `StreamDecoratorTrait` and implement your custom
+stream. Just `extend` `StreamDecorator` and implement your custom
 methods.
 
 For example, let's say we wanted to call a specific function each time the last
@@ -249,12 +249,10 @@ byte is read from a stream. This could be implemented by overriding the
 
 ```php
 use Psr\Http\Message\StreamInterface;
-use Hough\Psr7\StreamDecoratorTrait;
+use Hough\Psr7\StreamDecorator;
 
-class EofCallbackStream implements StreamInterface
+class EofCallbackStream extends StreamDecorator implements StreamInterface
 {
-    use StreamDecoratorTrait;
-
     private $callback;
 
     public function __construct(StreamInterface $stream, callable $cb)
@@ -277,7 +275,7 @@ class EofCallbackStream implements StreamInterface
 }
 ```
 
-This decorator could be added to any existing stream and used like so:
+This class could work with any existing stream and used like so:
 
 ```php
 use Hough\Psr7;
@@ -347,7 +345,7 @@ assert($uri === Hough\Psr7\uri_for($uri));
 
 ## `function stream_for`
 
-`function stream_for($resource = '', array $options = [])`
+`function stream_for($resource = '', array $options = array())`
 
 Create a new stream based on the input type.
 
@@ -502,7 +500,7 @@ Parse a query string into an associative array.
 If multiple values are found for the same key, the value of that key value pair
 will become an array. This function does not parse nested PHP style arrays into
 an associative array (e.g., `foo[a]=1&foo[b]=2` will be parsed into
-`['foo[a]' => '1', 'foo[b]' => '2']`).
+`array('foo[a]' => '1', 'foo[b]' => '2')`).
 
 
 ## `function build_query`
