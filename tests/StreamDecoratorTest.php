@@ -1,19 +1,19 @@
 <?php
-namespace GuzzleHttp\Tests\Psr7;
+namespace Hough\Tests\Psr7;
 
 use Psr\Http\Message\StreamInterface;
-use GuzzleHttp\Psr7;
-use GuzzleHttp\Psr7\StreamDecoratorTrait;
+use Hough\Psr7;
+use Hough\Psr7\StreamDecoratorTrait;
 
-class Str implements StreamInterface
+class Str extends Psr7\StreamDecorator implements StreamInterface
 {
-    use StreamDecoratorTrait;
+
 }
 
 /**
- * @covers GuzzleHttp\Psr7\StreamDecoratorTrait
+ * @covers Hough\Psr7\StreamDecorator
  */
-class StreamDecoratorTraitTest extends \PHPUnit_Framework_TestCase
+class StreamDecoratorTest extends \PHPUnit_Framework_TestCase
 {
     /** @var StreamInterface */
     private $a;
@@ -34,7 +34,7 @@ class StreamDecoratorTraitTest extends \PHPUnit_Framework_TestCase
     public function testCatchesExceptionsWhenCastingToString()
     {
         $s = $this->getMockBuilder('Psr\Http\Message\StreamInterface')
-            ->setMethods(['read'])
+            ->setMethods(array('read'))
             ->getMockForAbstractClass();
         $s->expects($this->once())
             ->method('read')
@@ -132,9 +132,7 @@ class StreamDecoratorTraitTest extends \PHPUnit_Framework_TestCase
     }
 }
 
-class BadStream
+class BadStream extends Psr7\StreamDecorator
 {
-    use StreamDecoratorTrait;
-
     public function __construct() {}
 }

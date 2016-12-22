@@ -1,14 +1,14 @@
 <?php
-namespace GuzzleHttp\Tests\Psr7;
+namespace Hough\Tests\Psr7;
 
-use GuzzleHttp\Psr7;
-use GuzzleHttp\Psr7\FnStream;
-use GuzzleHttp\Psr7\Stream;
-use GuzzleHttp\Psr7\LimitStream;
-use GuzzleHttp\Psr7\NoSeekStream;
+use Hough\Psr7;
+use Hough\Psr7\FnStream;
+use Hough\Psr7\Stream;
+use Hough\Psr7\LimitStream;
+use Hough\Psr7\NoSeekStream;
 
 /**
- * @covers GuzzleHttp\Psr7\LimitStream
+ * @covers Hough\Psr7\LimitStream
  */
 class LimitStreamTest extends \PHPUnit_Framework_TestCase
 {
@@ -140,10 +140,10 @@ class LimitStreamTest extends \PHPUnit_Framework_TestCase
 
     public function testReturnsNullIfSizeCannotBeDetermined()
     {
-        $a = new FnStream([
+        $a = new FnStream(array(
             'getSize' => function () { return null; },
             'tell'    => function () { return 0; },
-        ]);
+        ));
         $b = new LimitStream($a);
         $this->assertNull($b->getSize());
     }

@@ -1,11 +1,11 @@
 <?php
-namespace GuzzleHttp\Tests\Psr7;
+namespace Hough\Tests\Psr7;
 
-use GuzzleHttp\Psr7\Uri;
-use GuzzleHttp\Psr7\UriResolver;
+use Hough\Psr7\Uri;
+use Hough\Psr7\UriResolver;
 
 /**
- * @covers GuzzleHttp\Psr7\UriResolver
+ * @covers Hough\Psr7\UriResolver
  */
 class UriResolverTest extends \PHPUnit_Framework_TestCase
 {
@@ -65,106 +65,106 @@ class UriResolverTest extends \PHPUnit_Framework_TestCase
 
     public function getResolveTestCases()
     {
-        return [
-            [self::RFC3986_BASE, 'g:h',           'g:h'],
-            [self::RFC3986_BASE, 'g',             'http://a/b/c/g'],
-            [self::RFC3986_BASE, './g',           'http://a/b/c/g'],
-            [self::RFC3986_BASE, 'g/',            'http://a/b/c/g/'],
-            [self::RFC3986_BASE, '/g',            'http://a/g'],
-            [self::RFC3986_BASE, '//g',           'http://g'],
-            [self::RFC3986_BASE, '?y',            'http://a/b/c/d;p?y'],
-            [self::RFC3986_BASE, 'g?y',           'http://a/b/c/g?y'],
-            [self::RFC3986_BASE, '#s',            'http://a/b/c/d;p?q#s'],
-            [self::RFC3986_BASE, 'g#s',           'http://a/b/c/g#s'],
-            [self::RFC3986_BASE, 'g?y#s',         'http://a/b/c/g?y#s'],
-            [self::RFC3986_BASE, ';x',            'http://a/b/c/;x'],
-            [self::RFC3986_BASE, 'g;x',           'http://a/b/c/g;x'],
-            [self::RFC3986_BASE, 'g;x?y#s',       'http://a/b/c/g;x?y#s'],
-            [self::RFC3986_BASE, '',              self::RFC3986_BASE],
-            [self::RFC3986_BASE, '.',             'http://a/b/c/'],
-            [self::RFC3986_BASE, './',            'http://a/b/c/'],
-            [self::RFC3986_BASE, '..',            'http://a/b/'],
-            [self::RFC3986_BASE, '../',           'http://a/b/'],
-            [self::RFC3986_BASE, '../g',          'http://a/b/g'],
-            [self::RFC3986_BASE, '../..',         'http://a/'],
-            [self::RFC3986_BASE, '../../',        'http://a/'],
-            [self::RFC3986_BASE, '../../g',       'http://a/g'],
-            [self::RFC3986_BASE, '../../../g',    'http://a/g'],
-            [self::RFC3986_BASE, '../../../../g', 'http://a/g'],
-            [self::RFC3986_BASE, '/./g',          'http://a/g'],
-            [self::RFC3986_BASE, '/../g',         'http://a/g'],
-            [self::RFC3986_BASE, 'g.',            'http://a/b/c/g.'],
-            [self::RFC3986_BASE, '.g',            'http://a/b/c/.g'],
-            [self::RFC3986_BASE, 'g..',           'http://a/b/c/g..'],
-            [self::RFC3986_BASE, '..g',           'http://a/b/c/..g'],
-            [self::RFC3986_BASE, './../g',        'http://a/b/g'],
-            [self::RFC3986_BASE, 'foo////g',      'http://a/b/c/foo////g'],
-            [self::RFC3986_BASE, './g/.',         'http://a/b/c/g/'],
-            [self::RFC3986_BASE, 'g/./h',         'http://a/b/c/g/h'],
-            [self::RFC3986_BASE, 'g/../h',        'http://a/b/c/h'],
-            [self::RFC3986_BASE, 'g;x=1/./y',     'http://a/b/c/g;x=1/y'],
-            [self::RFC3986_BASE, 'g;x=1/../y',    'http://a/b/c/y'],
+        return array(
+            array(self::RFC3986_BASE, 'g:h',           'g:h'),
+            array(self::RFC3986_BASE, 'g',             'http://a/b/c/g'),
+            array(self::RFC3986_BASE, './g',           'http://a/b/c/g'),
+            array(self::RFC3986_BASE, 'g/',            'http://a/b/c/g/'),
+            array(self::RFC3986_BASE, '/g',            'http://a/g'),
+            array(self::RFC3986_BASE, '//g',           'http://g'),
+            array(self::RFC3986_BASE, '?y',            'http://a/b/c/d;p?y'),
+            array(self::RFC3986_BASE, 'g?y',           'http://a/b/c/g?y'),
+            array(self::RFC3986_BASE, '#s',            'http://a/b/c/d;p?q#s'),
+            array(self::RFC3986_BASE, 'g#s',           'http://a/b/c/g#s'),
+            array(self::RFC3986_BASE, 'g?y#s',         'http://a/b/c/g?y#s'),
+            array(self::RFC3986_BASE, ';x',            'http://a/b/c/;x'),
+            array(self::RFC3986_BASE, 'g;x',           'http://a/b/c/g;x'),
+            array(self::RFC3986_BASE, 'g;x?y#s',       'http://a/b/c/g;x?y#s'),
+            array(self::RFC3986_BASE, '',              self::RFC3986_BASE),
+            array(self::RFC3986_BASE, '.',             'http://a/b/c/'),
+            array(self::RFC3986_BASE, './',            'http://a/b/c/'),
+            array(self::RFC3986_BASE, '..',            'http://a/b/'),
+            array(self::RFC3986_BASE, '../',           'http://a/b/'),
+            array(self::RFC3986_BASE, '../g',          'http://a/b/g'),
+            array(self::RFC3986_BASE, '../..',         'http://a/'),
+            array(self::RFC3986_BASE, '../../',        'http://a/'),
+            array(self::RFC3986_BASE, '../../g',       'http://a/g'),
+            array(self::RFC3986_BASE, '../../../g',    'http://a/g'),
+            array(self::RFC3986_BASE, '../../../../g', 'http://a/g'),
+            array(self::RFC3986_BASE, '/./g',          'http://a/g'),
+            array(self::RFC3986_BASE, '/../g',         'http://a/g'),
+            array(self::RFC3986_BASE, 'g.',            'http://a/b/c/g.'),
+            array(self::RFC3986_BASE, '.g',            'http://a/b/c/.g'),
+            array(self::RFC3986_BASE, 'g..',           'http://a/b/c/g..'),
+            array(self::RFC3986_BASE, '..g',           'http://a/b/c/..g'),
+            array(self::RFC3986_BASE, './../g',        'http://a/b/g'),
+            array(self::RFC3986_BASE, 'foo////g',      'http://a/b/c/foo////g'),
+            array(self::RFC3986_BASE, './g/.',         'http://a/b/c/g/'),
+            array(self::RFC3986_BASE, 'g/./h',         'http://a/b/c/g/h'),
+            array(self::RFC3986_BASE, 'g/../h',        'http://a/b/c/h'),
+            array(self::RFC3986_BASE, 'g;x=1/./y',     'http://a/b/c/g;x=1/y'),
+            array(self::RFC3986_BASE, 'g;x=1/../y',    'http://a/b/c/y'),
             // dot-segments in the query or fragment
-            [self::RFC3986_BASE, 'g?y/./x',       'http://a/b/c/g?y/./x'],
-            [self::RFC3986_BASE, 'g?y/../x',      'http://a/b/c/g?y/../x'],
-            [self::RFC3986_BASE, 'g#s/./x',       'http://a/b/c/g#s/./x'],
-            [self::RFC3986_BASE, 'g#s/../x',      'http://a/b/c/g#s/../x'],
-            [self::RFC3986_BASE, 'g#s/../x',      'http://a/b/c/g#s/../x'],
-            [self::RFC3986_BASE, '?y#s',          'http://a/b/c/d;p?y#s'],
+            array(self::RFC3986_BASE, 'g?y/./x',       'http://a/b/c/g?y/./x'),
+            array(self::RFC3986_BASE, 'g?y/../x',      'http://a/b/c/g?y/../x'),
+            array(self::RFC3986_BASE, 'g#s/./x',       'http://a/b/c/g#s/./x'),
+            array(self::RFC3986_BASE, 'g#s/../x',      'http://a/b/c/g#s/../x'),
+            array(self::RFC3986_BASE, 'g#s/../x',      'http://a/b/c/g#s/../x'),
+            array(self::RFC3986_BASE, '?y#s',          'http://a/b/c/d;p?y#s'),
             // base with fragment
-            ['http://a/b/c?q#s', '?y',            'http://a/b/c?y'],
+            array('http://a/b/c?q#s', '?y',            'http://a/b/c?y'),
             // base with user info
-            ['http://u@a/b/c/d;p?q', '.',         'http://u@a/b/c/'],
-            ['http://u:p@a/b/c/d;p?q', '.',       'http://u:p@a/b/c/'],
+            array('http://u@a/b/c/d;p?q', '.',         'http://u@a/b/c/'),
+            array('http://u:p@a/b/c/d;p?q', '.',       'http://u:p@a/b/c/'),
             // path ending with slash or no slash at all
-            ['http://a/b/c/d/',  'e',             'http://a/b/c/d/e'],
-            ['urn:no-slash',     'e',             'urn:e'],
+            array('http://a/b/c/d/',  'e',             'http://a/b/c/d/e'),
+            array('urn:no-slash',     'e',             'urn:e'),
             // falsey relative parts
-            [self::RFC3986_BASE, '//0',           'http://0'],
-            [self::RFC3986_BASE, '0',             'http://a/b/c/0'],
-            [self::RFC3986_BASE, '?0',            'http://a/b/c/d;p?0'],
-            [self::RFC3986_BASE, '#0',            'http://a/b/c/d;p?q#0'],
+            array(self::RFC3986_BASE, '//0',           'http://0'),
+            array(self::RFC3986_BASE, '0',             'http://a/b/c/0'),
+            array(self::RFC3986_BASE, '?0',            'http://a/b/c/d;p?0'),
+            array(self::RFC3986_BASE, '#0',            'http://a/b/c/d;p?q#0'),
             // absolute path base URI
-            ['/a/b/',            '',              '/a/b/'],
-            ['/a/b',             '',              '/a/b'],
-            ['/',                'a',             '/a'],
-            ['/',                'a/b',           '/a/b'],
-            ['/a/b',             'g',             '/a/g'],
-            ['/a/b/c',           './',            '/a/b/'],
-            ['/a/b/',            '../',           '/a/'],
-            ['/a/b/c',           '../',           '/a/'],
-            ['/a/b/',            '../../x/y/z/',  '/x/y/z/'],
-            ['/a/b/c/d/e',       '../../../c/d',  '/a/c/d'],
-            ['/a/b/c//',         '../',           '/a/b/c/'],
-            ['/a/b/c/',          './/',           '/a/b/c//'],
-            ['/a/b/c',           '../../../../a', '/a'],
-            ['/a/b/c',           '../../../..',   '/'],
+            array('/a/b/',            '',              '/a/b/'),
+            array('/a/b',             '',              '/a/b'),
+            array('/',                'a',             '/a'),
+            array('/',                'a/b',           '/a/b'),
+            array('/a/b',             'g',             '/a/g'),
+            array('/a/b/c',           './',            '/a/b/'),
+            array('/a/b/',            '../',           '/a/'),
+            array('/a/b/c',           '../',           '/a/'),
+            array('/a/b/',            '../../x/y/z/',  '/x/y/z/'),
+            array('/a/b/c/d/e',       '../../../c/d',  '/a/c/d'),
+            array('/a/b/c//',         '../',           '/a/b/c/'),
+            array('/a/b/c/',          './/',           '/a/b/c//'),
+            array('/a/b/c',           '../../../../a', '/a'),
+            array('/a/b/c',           '../../../..',   '/'),
             // not actually a dot-segment
-            ['/a/b/c',           '..a/b..',           '/a/b/..a/b..'],
+            array('/a/b/c',           '..a/b..',           '/a/b/..a/b..'),
             // '' cannot be used as relative reference as it would inherit the base query component
-            ['/a/b?q',           'b',             '/a/b'],
-            ['/a/b/?q',          './',            '/a/b/'],
+            array('/a/b?q',           'b',             '/a/b'),
+            array('/a/b/?q',          './',            '/a/b/'),
             // path with colon: "with:colon" would be the wrong relative reference
-            ['/a/',              './with:colon',  '/a/with:colon'],
-            ['/a/',              'b/with:colon',  '/a/b/with:colon'],
-            ['/a/',              './:b/',         '/a/:b/'],
+            array('/a/',              './with:colon',  '/a/with:colon'),
+            array('/a/',              'b/with:colon',  '/a/b/with:colon'),
+            array('/a/',              './:b/',         '/a/:b/'),
             // relative path references
-            ['a',               'a/b',            'a/b'],
-            ['',                 '',              ''],
-            ['',                 '..',            ''],
-            ['/',                '..',            '/'],
-            ['urn:a/b',          '..//a/b',       'urn:/a/b'],
+            array('a',               'a/b',            'a/b'),
+            array('',                 '',              ''),
+            array('',                 '..',            ''),
+            array('/',                '..',            '/'),
+            array('urn:a/b',          '..//a/b',       'urn:/a/b'),
             // network path references
             // empty base path and relative-path reference
-            ['//example.com',    'a',             '//example.com/a'],
+            array('//example.com',    'a',             '//example.com/a'),
             // path starting with two slashes
-            ['//example.com//two-slashes', './',  '//example.com//'],
-            ['//example.com',    './/',           '//example.com//'],
-            ['//example.com/',   './/',           '//example.com//'],
+            array('//example.com//two-slashes', './',  '//example.com//'),
+            array('//example.com',    './/',           '//example.com//'),
+            array('//example.com/',   './/',           '//example.com//'),
             // base URI has less components than relative URI
-            ['/',                '//a/b?q#h',     '//a/b?q#h'],
-            ['/',                'urn:/',         'urn:/'],
-        ];
+            array('/',                '//a/b?q#h',     '//a/b?q#h'),
+            array('/',                'urn:/',         'urn:/'),
+        );
     }
 
     /**
@@ -172,32 +172,32 @@ class UriResolverTest extends \PHPUnit_Framework_TestCase
      */
     public function getRelativizeTestCases()
     {
-        return [
+        return array(
             // targets that are relative-path references are returned as-is
-            ['a/b',             'b/c',          'b/c'],
-            ['a/b/c',           '../b/c',       '../b/c'],
-            ['a',               '',             ''],
-            ['a',               './',           './'],
-            ['a',               'a/..',         'a/..'],
-            ['/a/b/?q',         '?q#h',         '?q#h'],
-            ['/a/b/?q',         '#h',           '#h'],
-            ['/a/b/?q',         'c#h',          'c#h'],
+            array('a/b',             'b/c',          'b/c'),
+            array('a/b/c',           '../b/c',       '../b/c'),
+            array('a',               '',             ''),
+            array('a',               './',           './'),
+            array('a',               'a/..',         'a/..'),
+            array('/a/b/?q',         '?q#h',         '?q#h'),
+            array('/a/b/?q',         '#h',           '#h'),
+            array('/a/b/?q',         'c#h',          'c#h'),
             // If the base URI has a query but the target has none, we cannot return an empty path reference as it would
             // inherit the base query component when resolving.
-            ['/a/b/?q',         '/a/b/#h',      './#h'],
-            ['/',               '/#h',          '#h'],
-            ['/',               '/',            ''],
-            ['http://a',        'http://a/',    './'],
-            ['urn:a/b?q',       'urn:x/y?q',    '../x/y?q'],
-            ['urn:',            'urn:/',        './/'],
-            ['urn:a/b?q',       'urn:',         '../'],
+            array('/a/b/?q',         '/a/b/#h',      './#h'),
+            array('/',               '/#h',          '#h'),
+            array('/',               '/',            ''),
+            array('http://a',        'http://a/',    './'),
+            array('urn:a/b?q',       'urn:x/y?q',    '../x/y?q'),
+            array('urn:',            'urn:/',        './/'),
+            array('urn:a/b?q',       'urn:',         '../'),
             // target URI has less components than base URI
-            ['http://a/b/',     '//a/b/c',      'c'],
-            ['http://a/b/',     '/b/c',         'c'],
-            ['http://a/b/',     '/x/y',         '../x/y'],
-            ['http://a/b/',     '/',            '../'],
+            array('http://a/b/',     '//a/b/c',      'c'),
+            array('http://a/b/',     '/b/c',         'c'),
+            array('http://a/b/',     '/x/y',         '../x/y'),
+            array('http://a/b/',     '/',            '../'),
             // absolute target URI without authority but base URI has one
-            ['urn://a/b/',      'urn:/b/',      'urn:/b/'],
-        ];
+            array('urn://a/b/',      'urn:/b/',      'urn:/b/'),
+        );
     }
 }

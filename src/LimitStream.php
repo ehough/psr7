@@ -1,5 +1,5 @@
 <?php
-namespace GuzzleHttp\Psr7;
+namespace Hough\Psr7;
 
 use Psr\Http\Message\StreamInterface;
 
@@ -7,10 +7,8 @@ use Psr\Http\Message\StreamInterface;
 /**
  * Decorator used to return only a subset of a stream
  */
-class LimitStream implements StreamInterface
+class LimitStream extends StreamDecorator
 {
-    use StreamDecoratorTrait;
-
     /** @var int Offset to start reading from */
     private $offset;
 

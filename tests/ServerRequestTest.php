@@ -1,29 +1,29 @@
 <?php
-namespace GuzzleHttp\Tests\Psr7;
+namespace Hough\Tests\Psr7;
 
-use GuzzleHttp\Psr7\ServerRequest;
-use GuzzleHttp\Psr7\UploadedFile;
-use GuzzleHttp\Psr7\Uri;
+use Hough\Psr7\ServerRequest;
+use Hough\Psr7\UploadedFile;
+use Hough\Psr7\Uri;
 
 /**
- * @covers GuzzleHttp\Psr7\ServerRequest
+ * @covers Hough\Psr7\ServerRequest
  */
 class ServerRequestTest extends \PHPUnit_Framework_TestCase
 {
     public function dataNormalizeFiles()
     {
-        return [
-            'Single file' => [
-                [
-                    'file' => [
+        return array(
+            'Single file' => array(
+                array(
+                    'file' => array(
                         'name' => 'MyFile.txt',
                         'type' => 'text/plain',
                         'tmp_name' => '/tmp/php/php1h4j1o',
                         'error' => '0',
                         'size' => '123'
-                    ]
-                ],
-                [
+                    )
+                ),
+                array(
                     'file' => new UploadedFile(
                         '/tmp/php/php1h4j1o',
                         123,
@@ -31,19 +31,19 @@ class ServerRequestTest extends \PHPUnit_Framework_TestCase
                         'MyFile.txt',
                         'text/plain'
                     )
-                ]
-            ],
-            'Empty file' => [
-                [
-                    'image_file' => [
+                )
+            ),
+            'Empty file' => array(
+                array(
+                    'image_file' => array(
                         'name' => '',
                         'type' => '',
                         'tmp_name' => '',
                         'error' => '4',
                         'size' => '0'
-                    ]
-                ],
-                [
+                    )
+                ),
+                array(
                     'image_file' => new UploadedFile(
                         '',
                         0,
@@ -51,10 +51,10 @@ class ServerRequestTest extends \PHPUnit_Framework_TestCase
                         '',
                         ''
                     )
-                ]
-            ],
-            'Already Converted' => [
-                [
+                )
+            ),
+            'Already Converted' => array(
+                array(
                     'file' => new UploadedFile(
                         '/tmp/php/php1h4j1o',
                         123,
@@ -62,8 +62,8 @@ class ServerRequestTest extends \PHPUnit_Framework_TestCase
                         'MyFile.txt',
                         'text/plain'
                     )
-                ],
-                [
+                ),
+                array(
                     'file' => new UploadedFile(
                         '/tmp/php/php1h4j1o',
                         123,
@@ -71,11 +71,11 @@ class ServerRequestTest extends \PHPUnit_Framework_TestCase
                         'MyFile.txt',
                         'text/plain'
                     )
-                ]
-            ],
-            'Already Converted array' => [
-                [
-                    'file' => [
+                )
+            ),
+            'Already Converted array' => array(
+                array(
+                    'file' => array(
                         new UploadedFile(
                             '/tmp/php/php1h4j1o',
                             123,
@@ -90,10 +90,10 @@ class ServerRequestTest extends \PHPUnit_Framework_TestCase
                             '',
                             ''
                         )
-                    ],
-                ],
-                [
-                    'file' => [
+                    ),
+                ),
+                array(
+                    'file' => array(
                         new UploadedFile(
                             '/tmp/php/php1h4j1o',
                             123,
@@ -108,27 +108,27 @@ class ServerRequestTest extends \PHPUnit_Framework_TestCase
                             '',
                             ''
                         )
-                    ],
-                ]
-            ],
-            'Multiple files' => [
-                [
-                    'text_file' => [
+                    ),
+                )
+            ),
+            'Multiple files' => array(
+                array(
+                    'text_file' => array(
                         'name' => 'MyFile.txt',
                         'type' => 'text/plain',
                         'tmp_name' => '/tmp/php/php1h4j1o',
                         'error' => '0',
                         'size' => '123'
-                    ],
-                    'image_file' => [
+                    ),
+                    'image_file' => array(
                         'name' => '',
                         'type' => '',
                         'tmp_name' => '',
                         'error' => '4',
                         'size' => '0'
-                    ]
-                ],
-                [
+                    )
+                ),
+                array(
                     'text_file' => new UploadedFile(
                         '/tmp/php/php1h4j1o',
                         123,
@@ -143,72 +143,72 @@ class ServerRequestTest extends \PHPUnit_Framework_TestCase
                         '',
                         ''
                     )
-                ]
-            ],
-            'Nested files' => [
-                [
-                    'file' => [
-                        'name' => [
+                )
+            ),
+            'Nested files' => array(
+                array(
+                    'file' => array(
+                        'name' => array(
                             0 => 'MyFile.txt',
                             1 => 'Image.png',
-                        ],
-                        'type' => [
+                        ),
+                        'type' => array(
                             0 => 'text/plain',
                             1 => 'image/png',
-                        ],
-                        'tmp_name' => [
+                        ),
+                        'tmp_name' => array(
                             0 => '/tmp/php/hp9hskjhf',
                             1 => '/tmp/php/php1h4j1o',
-                        ],
-                        'error' => [
+                        ),
+                        'error' => array(
                             0 => '0',
                             1 => '0',
-                        ],
-                        'size' => [
+                        ),
+                        'size' => array(
                             0 => '123',
                             1 => '7349',
-                        ],
-                    ],
-                    'nested' => [
-                        'name' => [
+                        ),
+                    ),
+                    'nested' => array(
+                        'name' => array(
                             'other' => 'Flag.txt',
-                            'test' => [
+                            'test' => array(
                                 0 => 'Stuff.txt',
                                 1 => '',
-                            ],
-                        ],
-                        'type' => [
+                            ),
+                        ),
+                        'type' => array(
                             'other' => 'text/plain',
-                            'test' => [
+                            'test' => array(
                                 0 => 'text/plain',
                                 1 => '',
-                            ],
-                        ],
-                        'tmp_name' => [
+                            ),
+                        ),
+                        'tmp_name' => array(
                             'other' => '/tmp/php/hp9hskjhf',
-                            'test' => [
+                            'test' => array(
                                 0 => '/tmp/php/asifu2gp3',
                                 1 => '',
-                            ],
-                        ],
-                        'error' => [
+                            ),
+                        ),
+                        'error' => array(
                             'other' => '0',
-                            'test' => [
+                            'test' => array(
                                 0 => '0',
                                 1 => '4',
-                            ],
-                        ],
-                        'size' => [
+                            ),
+                        ),
+                        'size' => array(
                             'other' => '421',
-                            'test' => [
+                            'test' => array(
                                 0 => '32',
                                 1 => '0',
-                            ]
-                        ]
-                    ],
-                ],
-                [
-                    'file' => [
+                            )
+                        )
+                    ),
+                ),
+                array(
+                    'file' => array(
                         0 => new UploadedFile(
                             '/tmp/php/hp9hskjhf',
                             123,
@@ -223,8 +223,8 @@ class ServerRequestTest extends \PHPUnit_Framework_TestCase
                             'Image.png',
                             'image/png'
                         ),
-                    ],
-                    'nested' => [
+                    ),
+                    'nested' => array(
                         'other' => new UploadedFile(
                             '/tmp/php/hp9hskjhf',
                             421,
@@ -232,7 +232,7 @@ class ServerRequestTest extends \PHPUnit_Framework_TestCase
                             'Flag.txt',
                             'text/plain'
                         ),
-                        'test' => [
+                        'test' => array(
                             0 => new UploadedFile(
                                 '/tmp/php/asifu2gp3',
                                 32,
@@ -247,11 +247,11 @@ class ServerRequestTest extends \PHPUnit_Framework_TestCase
                                 '',
                                 ''
                             ),
-                        ]
-                    ]
-                ]
-            ]
-        ];
+                        )
+                    )
+                )
+            )
+        );
     }
 
     /**
@@ -268,12 +268,12 @@ class ServerRequestTest extends \PHPUnit_Framework_TestCase
     {
         $this->setExpectedException('InvalidArgumentException', 'Invalid value in files specification');
 
-        ServerRequest::normalizeFiles(['test' => 'something']);
+        ServerRequest::normalizeFiles(array('test' => 'something'));
     }
 
     public function dataGetUriFromGlobals()
     {
-        $server = [
+        $server = array(
             'PHP_SELF' => '/blog/article.php',
             'GATEWAY_INTERFACE' => 'CGI/1.1',
             'SERVER_ADDR' => 'Server IP: 217.112.82.20',
@@ -302,34 +302,34 @@ class ServerRequestTest extends \PHPUnit_Framework_TestCase
             'SERVER_SIGNATURE' => 'Version signature: 5.123',
             'SCRIPT_NAME' => '/blog/article.php',
             'REQUEST_URI' => '/blog/article.php?id=10&user=foo',
-        ];
+        );
 
-        return [
-            'Normal request' => [
+        return array(
+            'Normal request' => array(
                 'http://www.blakesimpson.co.uk/blog/article.php?id=10&user=foo',
                 $server,
-            ],
-            'Secure request' => [
+            ),
+            'Secure request' => array(
                 'https://www.blakesimpson.co.uk/blog/article.php?id=10&user=foo',
-                array_merge($server, ['HTTPS' => 'on', 'SERVER_PORT' => '443']),
-            ],
-            'HTTP_HOST missing' => [
+                array_merge($server, array('HTTPS' => 'on', 'SERVER_PORT' => '443')),
+            ),
+            'HTTP_HOST missing' => array(
                 'http://www.blakesimpson.co.uk/blog/article.php?id=10&user=foo',
-                array_merge($server, ['HTTP_HOST' => null]),
-            ],
-            'No query String' => [
+                array_merge($server, array('HTTP_HOST' => null)),
+            ),
+            'No query String' => array(
                 'http://www.blakesimpson.co.uk/blog/article.php',
-                array_merge($server, ['REQUEST_URI' => '/blog/article.php', 'QUERY_STRING' => '']),
-            ],
-            'Different port' => [
+                array_merge($server, array('REQUEST_URI' => '/blog/article.php', 'QUERY_STRING' => '')),
+            ),
+            'Different port' => array(
                 'http://www.blakesimpson.co.uk:8324/blog/article.php?id=10&user=foo',
-                array_merge($server, ['SERVER_PORT' => '8324']),
-            ],
-            'Empty server variable' => [
+                array_merge($server, array('SERVER_PORT' => '8324')),
+            ),
+            'Empty server variable' => array(
                 '',
-                [],
-            ],
-        ];
+                array(),
+            ),
+        );
     }
 
     /**
@@ -344,7 +344,7 @@ class ServerRequestTest extends \PHPUnit_Framework_TestCase
 
     public function testFromGlobals()
     {
-        $_SERVER = [
+        $_SERVER = array(
             'PHP_SELF' => '/blog/article.php',
             'GATEWAY_INTERFACE' => 'CGI/1.1',
             'SERVER_ADDR' => 'Server IP: 217.112.82.20',
@@ -373,36 +373,36 @@ class ServerRequestTest extends \PHPUnit_Framework_TestCase
             'SERVER_SIGNATURE' => 'Version signature: 5.123',
             'SCRIPT_NAME' => '/blog/article.php',
             'REQUEST_URI' => '/blog/article.php?id=10&user=foo',
-        ];
+        );
 
-        $_COOKIE = [
+        $_COOKIE = array(
             'logged-in' => 'yes!'
-        ];
+        );
 
-        $_POST = [
+        $_POST = array(
             'name' => 'Pesho',
             'email' => 'pesho@example.com',
-        ];
+        );
 
-        $_GET = [
+        $_GET = array(
             'id' => 10,
             'user' => 'foo',
-        ];
+        );
 
-        $_FILES = [
-            'file' => [
+        $_FILES = array(
+            'file' => array(
                 'name' => 'MyFile.txt',
                 'type' => 'text/plain',
                 'tmp_name' => '/tmp/php/php1h4j1o',
                 'error' => UPLOAD_ERR_OK,
                 'size' => 123,
-            ]
-        ];
+            )
+        );
 
         $server = ServerRequest::fromGlobals();
 
         $this->assertEquals('POST', $server->getMethod());
-        $this->assertEquals(['Host' => ['www.blakesimpson.co.uk']], $server->getHeaders());
+        $this->assertEquals(array('Host' => array('www.blakesimpson.co.uk')), $server->getHeaders());
         $this->assertEquals('', (string) $server->getBody());
         $this->assertEquals('1.0', $server->getProtocolVersion());
         $this->assertEquals($_COOKIE, $server->getCookieParams());
@@ -414,7 +414,7 @@ class ServerRequestTest extends \PHPUnit_Framework_TestCase
             $server->getUri()
         );
 
-        $expectedFiles = [
+        $expectedFiles = array(
             'file' => new UploadedFile(
                 '/tmp/php/php1h4j1o',
                 123,
@@ -422,7 +422,7 @@ class ServerRequestTest extends \PHPUnit_Framework_TestCase
                 'MyFile.txt',
                 'text/plain'
             ),
-        ];
+        );
 
         $this->assertEquals($expectedFiles, $server->getUploadedFiles());
     }
@@ -431,22 +431,22 @@ class ServerRequestTest extends \PHPUnit_Framework_TestCase
     {
         $request1 = new ServerRequest('GET', '/');
 
-        $files = [
+        $files = array(
             'file' => new UploadedFile('test', 123, UPLOAD_ERR_OK)
-        ];
+        );
 
         $request2 = $request1->withUploadedFiles($files);
 
         $this->assertNotSame($request2, $request1);
-        $this->assertSame([], $request1->getUploadedFiles());
+        $this->assertSame(array(), $request1->getUploadedFiles());
         $this->assertSame($files, $request2->getUploadedFiles());
     }
 
     public function testServerParams()
     {
-        $params = ['name' => 'value'];
+        $params = array('name' => 'value');
 
-        $request = new ServerRequest('GET', '/', [], null, '1.1', $params);
+        $request = new ServerRequest('GET', '/', array(), null, '1.1', $params);
         $this->assertSame($params, $request->getServerParams());
     }
 
@@ -454,7 +454,7 @@ class ServerRequestTest extends \PHPUnit_Framework_TestCase
     {
         $request1 = new ServerRequest('GET', '/');
 
-        $params = ['name' => 'value'];
+        $params = array('name' => 'value');
 
         $request2 = $request1->withCookieParams($params);
 
@@ -467,7 +467,7 @@ class ServerRequestTest extends \PHPUnit_Framework_TestCase
     {
         $request1 = new ServerRequest('GET', '/');
 
-        $params = ['name' => 'value'];
+        $params = array('name' => 'value');
 
         $request2 = $request1->withQueryParams($params);
 
@@ -480,7 +480,7 @@ class ServerRequestTest extends \PHPUnit_Framework_TestCase
     {
         $request1 = new ServerRequest('GET', '/');
 
-        $params = ['name' => 'value'];
+        $params = array('name' => 'value');
 
         $request2 = $request1->withParsedBody($params);
 
@@ -512,21 +512,22 @@ class ServerRequestTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->assertEquals('value', $request2->getAttribute('name'));
-        $this->assertEquals(['name' => 'value'], $request2->getAttributes());
-        $this->assertEquals(['name' => 'value', 'other' => 'otherValue'], $request3->getAttributes());
-        $this->assertEquals(['name' => 'value'], $request4->getAttributes());
+        $this->assertEquals(array('name' => 'value'), $request2->getAttributes());
+        $this->assertEquals(array('name' => 'value', 'other' => 'otherValue'), $request3->getAttributes());
+        $this->assertEquals(array('name' => 'value'), $request4->getAttributes());
     }
 
     public function testNullAttribute()
     {
-        $request = (new ServerRequest('GET', '/'))->withAttribute('name', null);
+        $request = new ServerRequest('GET', '/');
+        $request = $request->withAttribute('name', null);
 
-        $this->assertSame(['name' => null], $request->getAttributes());
+        $this->assertSame(array('name' => null), $request->getAttributes());
         $this->assertNull($request->getAttribute('name', 'different-default'));
 
         $requestWithoutAttribute = $request->withoutAttribute('name');
 
-        $this->assertSame([], $requestWithoutAttribute->getAttributes());
+        $this->assertSame(array(), $requestWithoutAttribute->getAttributes());
         $this->assertSame('different-default', $requestWithoutAttribute->getAttribute('name', 'different-default'));
     }
 }

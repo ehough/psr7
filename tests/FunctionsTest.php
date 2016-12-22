@@ -1,10 +1,18 @@
 <?php
-namespace GuzzleHttp\Tests\Psr7;
+namespace Hough\Tests\Psr7;
 
-use GuzzleHttp\Psr7;
-use GuzzleHttp\Psr7\FnStream;
-use GuzzleHttp\Psr7\NoSeekStream;
+use Hough\Psr7;
+use Hough\Psr7\FnStream;
+use Hough\Psr7\NoSeekStream;
 use Psr\Http\Message\ServerRequestInterface;
+
+if (!defined('PHP_QUERY_RFC3986')) {
+    define('PHP_QUERY_RFC3986', 2);
+}
+
+if (!defined('PHP_QUERY_RFC1738')) {
+    define('PHP_QUERY_RFC1738', 1);
+}
 
 class FunctionsTest extends \PHPUnit_Framework_TestCase
 {
@@ -21,9 +29,9 @@ class FunctionsTest extends \PHPUnit_Framework_TestCase
     public function testCopiesToStringStopsWhenReadFails()
     {
         $s1 = Psr7\stream_for('foobaz');
-        $s1 = FnStream::decorate($s1, [
+        $s1 = FnStream::decorate($s1, array(
             'read' => function () { return ''; }
-        ]);
+        ));
         $result = Psr7\copy_to_string($s1);
         $this->assertEquals('', $result);
     }
@@ -46,7 +54,7 @@ class FunctionsTest extends \PHPUnit_Framework_TestCase
     {
         $s1 = Psr7\stream_for('foobaz');
         $s2 = Psr7\stream_for('');
-        $s2 = FnStream::decorate($s2, ['write' => function () { return 0; }]);
+        $s2 = FnStream::decorate($s2, array('write' => function () { return 0; }));
         Psr7\copy_to_stream($s1, $s2);
         $this->assertEquals('', (string) $s2);
     }
@@ -55,15 +63,15 @@ class FunctionsTest extends \PHPUnit_Framework_TestCase
     {
         $s1 = Psr7\stream_for('foobaz');
         $s2 = Psr7\stream_for('');
-        $s2 = FnStream::decorate($s2, ['write' => function () { return 0; }]);
+        $s2 = FnStream::decorate($s2, array('write' => function () { return 0; }));
         Psr7\copy_to_stream($s1, $s2, 10);
         $this->assertEquals('', (string) $s2);
     }
 
     public function testCopyToStreamReadsInChunksInsteadOfAllInMemory()
     {
-        $sizes = [];
-        $s1 = new Psr7\FnStream([
+        $sizes = array();
+        $s1 = new Psr7\FnStream(array(
             'eof' => function() {
                 return false;
             },
@@ -71,7 +79,7 @@ class FunctionsTest extends \PHPUnit_Framework_TestCase
                 $sizes[] = $size;
                 return str_repeat('.', $size);
             }
-        ]);
+        ));
         $s2 = Psr7\stream_for('');
         Psr7\copy_to_stream($s1, $s2, 16394);
         $s2->seek(0);
@@ -84,7 +92,7 @@ class FunctionsTest extends \PHPUnit_Framework_TestCase
     public function testStopsCopyToSteamWhenReadFailsWithMaxLen()
     {
         $s1 = Psr7\stream_for('foobaz');
-        $s1 = FnStream::decorate($s1, ['read' => function () { return ''; }]);
+        $s1 = FnStream::decorate($s1, array('read' => function () { return ''; }));
         $s2 = Psr7\stream_for('');
         Psr7\copy_to_stream($s1, $s2, 10);
         $this->assertEquals('', (string) $s2);
@@ -107,8 +115,8 @@ class FunctionsTest extends \PHPUnit_Framework_TestCase
 
     public function testReadsLineUntilFalseReturnedFromRead()
     {
-        $s = $this->getMockBuilder('GuzzleHttp\Psr7\Stream')
-            ->setMethods(['read', 'eof'])
+        $s = $this->getMockBuilder('Hough\Psr7\Stream')
+            ->setMethods(array('read', 'eof'))
             ->disableOriginalConstructor()
             ->getMock();
         $s->expects($this->exactly(2))
@@ -169,41 +177,41 @@ class FunctionsTest extends \PHPUnit_Framework_TestCase
 
     public function parseQueryProvider()
     {
-        return [
+        return array(
             // Does not need to parse when the string is empty
-            ['', []],
+            array('', array()),
             // Can parse mult-values items
-            ['q=a&q=b', ['q' => ['a', 'b']]],
+            array('q=a&q=b', array('q' => array('a', 'b'))),
             // Can parse multi-valued items that use numeric indices
-            ['q[0]=a&q[1]=b', ['q[0]' => 'a', 'q[1]' => 'b']],
+            array('q[0]=a&q[1]=b', array('q[0]' => 'a', 'q[1]' => 'b')),
             // Can parse duplicates and does not include numeric indices
-            ['q[]=a&q[]=b', ['q[]' => ['a', 'b']]],
+            array('q[]=a&q[]=b', array('q[]' => array('a', 'b'))),
             // Ensures that the value of "q" is an array even though one value
-            ['q[]=a', ['q[]' => 'a']],
+            array('q[]=a', array('q[]' => 'a')),
             // Does not modify "." to "_" like PHP's parse_str()
-            ['q.a=a&q.b=b', ['q.a' => 'a', 'q.b' => 'b']],
+            array('q.a=a&q.b=b', array('q.a' => 'a', 'q.b' => 'b')),
             // Can decode %20 to " "
-            ['q%20a=a%20b', ['q a' => 'a b']],
+            array('q%20a=a%20b', array('q a' => 'a b')),
             // Can parse funky strings with no values by assigning each to null
-            ['q&a', ['q' => null, 'a' => null]],
+            array('q&a', array('q' => null, 'a' => null)),
             // Does not strip trailing equal signs
-            ['data=abc=', ['data' => 'abc=']],
+            array('data=abc=', array('data' => 'abc=')),
             // Can store duplicates without affecting other values
-            ['foo=a&foo=b&?µ=c', ['foo' => ['a', 'b'], '?µ' => 'c']],
+            array('foo=a&foo=b&?µ=c', array('foo' => array('a', 'b'), '?µ' => 'c')),
             // Sets value to null when no "=" is present
-            ['foo', ['foo' => null]],
+            array('foo', array('foo' => null)),
             // Preserves "0" keys.
-            ['0', ['0' => null]],
+            array('0', array('0' => null)),
             // Sets the value to an empty string when "=" is present
-            ['0=', ['0' => '']],
+            array('0=', array('0' => '')),
             // Preserves falsey keys
-            ['var=0', ['var' => '0']],
-            ['a[b][c]=1&a[b][c]=2', ['a[b][c]' => ['1', '2']]],
-            ['a[b]=c&a[d]=e', ['a[b]' => 'c', 'a[d]' => 'e']],
+            array('var=0', array('var' => '0')),
+            array('a[b][c]=1&a[b][c]=2', array('a[b][c]' => array('1', '2'))),
+            array('a[b]=c&a[d]=e', array('a[b]' => 'c', 'a[d]' => 'e')),
             // Ensure it doesn't leave things behind with repeated values
             // Can parse mult-values items
-            ['q=a&q=b&q=c', ['q' => ['a', 'b', 'c']]],
-        ];
+            array('q=a&q=b&q=c', array('q' => array('a', 'b', 'c'))),
+        );
     }
 
     /**
@@ -219,7 +227,7 @@ class FunctionsTest extends \PHPUnit_Framework_TestCase
     {
         $str = 'foo%20=bar';
         $data = Psr7\parse_query($str, false);
-        $this->assertEquals(['foo%20' => 'bar'], $data);
+        $this->assertEquals(array('foo%20' => 'bar'), $data);
     }
 
     /**
@@ -233,19 +241,19 @@ class FunctionsTest extends \PHPUnit_Framework_TestCase
 
     public function testEncodesWithRfc1738()
     {
-        $str = Psr7\build_query(['foo bar' => 'baz+'], PHP_QUERY_RFC1738);
+        $str = Psr7\build_query(array('foo bar' => 'baz+'), PHP_QUERY_RFC1738);
         $this->assertEquals('foo+bar=baz%2B', $str);
     }
 
     public function testEncodesWithRfc3986()
     {
-        $str = Psr7\build_query(['foo bar' => 'baz+'], PHP_QUERY_RFC3986);
+        $str = Psr7\build_query(array('foo bar' => 'baz+'), PHP_QUERY_RFC3986);
         $this->assertEquals('foo%20bar=baz%2B', $str);
     }
 
     public function testDoesNotEncode()
     {
-        $str = Psr7\build_query(['foo bar' => 'baz+'], false);
+        $str = Psr7\build_query(array('foo bar' => 'baz+'), false);
         $this->assertEquals('foo bar=baz+', $str);
     }
 
@@ -354,9 +362,9 @@ class FunctionsTest extends \PHPUnit_Framework_TestCase
 
     public function testCreatesUriForValue()
     {
-        $this->assertInstanceOf('GuzzleHttp\Psr7\Uri', Psr7\uri_for('/foo'));
+        $this->assertInstanceOf('Hough\Psr7\Uri', Psr7\uri_for('/foo'));
         $this->assertInstanceOf(
-            'GuzzleHttp\Psr7\Uri',
+            'Hough\Psr7\Uri',
             Psr7\uri_for(new Psr7\Uri('/foo'))
         );
     }
@@ -366,7 +374,7 @@ class FunctionsTest extends \PHPUnit_Framework_TestCase
      */
     public function testValidatesUri()
     {
-        Psr7\uri_for([]);
+        Psr7\uri_for(array());
     }
 
     public function testKeepsPositionOfResource()
@@ -381,7 +389,7 @@ class FunctionsTest extends \PHPUnit_Framework_TestCase
     public function testCreatesWithFactory()
     {
         $stream = Psr7\stream_for('foo');
-        $this->assertInstanceOf('GuzzleHttp\Psr7\Stream', $stream);
+        $this->assertInstanceOf('Hough\Psr7\Stream', $stream);
         $this->assertEquals('foo', $stream->getContents());
         $stream->close();
     }
@@ -389,20 +397,20 @@ class FunctionsTest extends \PHPUnit_Framework_TestCase
     public function testFactoryCreatesFromEmptyString()
     {
         $s = Psr7\stream_for();
-        $this->assertInstanceOf('GuzzleHttp\Psr7\Stream', $s);
+        $this->assertInstanceOf('Hough\Psr7\Stream', $s);
     }
 
     public function testFactoryCreatesFromNull()
     {
         $s = Psr7\stream_for(null);
-        $this->assertInstanceOf('GuzzleHttp\Psr7\Stream', $s);
+        $this->assertInstanceOf('Hough\Psr7\Stream', $s);
     }
 
     public function testFactoryCreatesFromResource()
     {
         $r = fopen(__FILE__, 'r');
         $s = Psr7\stream_for($r);
-        $this->assertInstanceOf('GuzzleHttp\Psr7\Stream', $s);
+        $this->assertInstanceOf('Hough\Psr7\Stream', $s);
         $this->assertSame(file_get_contents(__FILE__), (string) $s);
     }
 
@@ -410,7 +418,7 @@ class FunctionsTest extends \PHPUnit_Framework_TestCase
     {
         $r = new HasToString();
         $s = Psr7\stream_for($r);
-        $this->assertInstanceOf('GuzzleHttp\Psr7\Stream', $s);
+        $this->assertInstanceOf('Hough\Psr7\Stream', $s);
         $this->assertEquals('foo', (string) $s);
     }
 
@@ -430,22 +438,22 @@ class FunctionsTest extends \PHPUnit_Framework_TestCase
 
     public function testReturnsCustomMetadata()
     {
-        $s = Psr7\stream_for('foo', ['metadata' => ['hwm' => 3]]);
+        $s = Psr7\stream_for('foo', array('metadata' => array('hwm' => 3)));
         $this->assertEquals(3, $s->getMetadata('hwm'));
         $this->assertArrayHasKey('hwm', $s->getMetadata());
     }
 
     public function testCanSetSize()
     {
-        $s = Psr7\stream_for('', ['size' => 10]);
+        $s = Psr7\stream_for('', array('size' => 10));
         $this->assertEquals(10, $s->getSize());
     }
 
     public function testCanCreateIteratorBasedStream()
     {
-        $a = new \ArrayIterator(['foo', 'bar', '123']);
+        $a = new \ArrayIterator(array('foo', 'bar', '123'));
         $p = Psr7\stream_for($a);
-        $this->assertInstanceOf('GuzzleHttp\Psr7\PumpStream', $p);
+        $this->assertInstanceOf('Hough\Psr7\PumpStream', $p);
         $this->assertEquals('foo', $p->read(3));
         $this->assertFalse($p->eof());
         $this->assertEquals('b', $p->read(1));
@@ -459,10 +467,10 @@ class FunctionsTest extends \PHPUnit_Framework_TestCase
 
     public function testConvertsRequestsToStrings()
     {
-        $request = new Psr7\Request('PUT', 'http://foo.com/hi?123', [
+        $request = new Psr7\Request('PUT', 'http://foo.com/hi?123', array(
             'Baz' => 'bar',
             'Qux' => 'ipsum'
-        ], 'hello', '1.0');
+        ), 'hello', '1.0');
         $this->assertEquals(
             "PUT /hi?123 HTTP/1.0\r\nHost: foo.com\r\nBaz: bar\r\nQux: ipsum\r\n\r\nhello",
             Psr7\str($request)
@@ -471,10 +479,10 @@ class FunctionsTest extends \PHPUnit_Framework_TestCase
 
     public function testConvertsResponsesToStrings()
     {
-        $response = new Psr7\Response(200, [
+        $response = new Psr7\Response(200, array(
             'Baz' => 'bar',
             'Qux' => 'ipsum'
-        ], 'hello', '1.0', 'FOO');
+        ), 'hello', '1.0', 'FOO');
         $this->assertEquals(
             "HTTP/1.0 200 FOO\r\nBaz: bar\r\nQux: ipsum\r\n\r\nhello",
             Psr7\str($response)
@@ -536,14 +544,14 @@ class FunctionsTest extends \PHPUnit_Framework_TestCase
 
     public function testParsesArrayHeaders()
     {
-        $header = ['a, b', 'c', 'd, e'];
-        $this->assertEquals(['a', 'b', 'c', 'd', 'e'], Psr7\normalize_header($header));
+        $header = array('a, b', 'c', 'd, e');
+        $this->assertEquals(array('a', 'b', 'c', 'd', 'e'), Psr7\normalize_header($header));
     }
 
     public function testRewindsBody()
     {
         $body = Psr7\stream_for('abc');
-        $res = new Psr7\Response(200, [], $body);
+        $res = new Psr7\Response(200, array(), $body);
         Psr7\rewind_body($res);
         $this->assertEquals(0, $body->tell());
         $body->rewind();
@@ -558,19 +566,19 @@ class FunctionsTest extends \PHPUnit_Framework_TestCase
     {
         $body = Psr7\stream_for('abc');
         $body->read(1);
-        $body = FnStream::decorate($body, [
+        $body = FnStream::decorate($body, array(
             'rewind' => function () { throw new \RuntimeException('a'); }
-        ]);
-        $res = new Psr7\Response(200, [], $body);
+        ));
+        $res = new Psr7\Response(200, array(), $body);
         Psr7\rewind_body($res);
     }
 
     public function testCanModifyRequestWithUri()
     {
         $r1 = new Psr7\Request('GET', 'http://foo.com');
-        $r2 = Psr7\modify_request($r1, [
+        $r2 = Psr7\modify_request($r1, array(
             'uri' => new Psr7\Uri('http://www.foo.com')
-        ]);
+        ));
         $this->assertEquals('http://www.foo.com', (string) $r2->getUri());
         $this->assertEquals('www.foo.com', (string) $r2->getHeaderLine('host'));
     }
@@ -578,17 +586,17 @@ class FunctionsTest extends \PHPUnit_Framework_TestCase
     public function testCanModifyRequestWithUriAndPort()
     {
         $r1 = new Psr7\Request('GET', 'http://foo.com:8000');
-        $r2 = Psr7\modify_request($r1, [
+        $r2 = Psr7\modify_request($r1, array(
             'uri' => new Psr7\Uri('http://www.foo.com:8000')
-        ]);
+        ));
         $this->assertEquals('http://www.foo.com:8000', (string) $r2->getUri());
         $this->assertEquals('www.foo.com:8000', (string) $r2->getHeaderLine('host'));
     }
 
     public function testCanModifyRequestWithCaseInsensitiveHeader()
     {
-        $r1 = new Psr7\Request('GET', 'http://foo.com', ['User-Agent' => 'foo']);
-        $r2 = Psr7\modify_request($r1, ['set_headers' => ['User-agent' => 'bar']]);
+        $r1 = new Psr7\Request('GET', 'http://foo.com', array('User-Agent' => 'foo'));
+        $r2 = Psr7\modify_request($r1, array('set_headers' => array('User-agent' => 'bar')));
         $this->assertEquals('bar', $r2->getHeaderLine('User-Agent'));
         $this->assertEquals('bar', $r2->getHeaderLine('User-agent'));
     }
@@ -596,26 +604,26 @@ class FunctionsTest extends \PHPUnit_Framework_TestCase
     public function testReturnsAsIsWhenNoChanges()
     {
         $r1 = new Psr7\Request('GET', 'http://foo.com');
-        $r2 = Psr7\modify_request($r1, []);
+        $r2 = Psr7\modify_request($r1, array());
         $this->assertTrue($r2 instanceof Psr7\Request);
 
         $r1 = new Psr7\ServerRequest('GET', 'http://foo.com');
-        $r2 = Psr7\modify_request($r1, []);
+        $r2 = Psr7\modify_request($r1, array());
         $this->assertTrue($r2 instanceof ServerRequestInterface);
     }
 
     public function testReturnsUriAsIsWhenNoChanges()
     {
         $r1 = new Psr7\Request('GET', 'http://foo.com');
-        $r2 = Psr7\modify_request($r1, ['set_headers' => ['foo' => 'bar']]);
+        $r2 = Psr7\modify_request($r1, array('set_headers' => array('foo' => 'bar')));
         $this->assertNotSame($r1, $r2);
         $this->assertEquals('bar', $r2->getHeaderLine('foo'));
     }
 
     public function testRemovesHeadersFromMessage()
     {
-        $r1 = new Psr7\Request('GET', 'http://foo.com', ['foo' => 'bar']);
-        $r2 = Psr7\modify_request($r1, ['remove_headers' => ['foo']]);
+        $r1 = new Psr7\Request('GET', 'http://foo.com', array('foo' => 'bar'));
+        $r2 = Psr7\modify_request($r1, array('remove_headers' => array('foo')));
         $this->assertNotSame($r1, $r2);
         $this->assertFalse($r2->hasHeader('foo'));
     }
@@ -623,7 +631,7 @@ class FunctionsTest extends \PHPUnit_Framework_TestCase
     public function testAddsQueryToUri()
     {
         $r1 = new Psr7\Request('GET', 'http://foo.com');
-        $r2 = Psr7\modify_request($r1, ['query' => 'foo=bar']);
+        $r2 = Psr7\modify_request($r1, array('query' => 'foo=bar'));
         $this->assertNotSame($r1, $r2);
         $this->assertEquals('foo=bar', $r2->getUri()->getQuery());
     }
@@ -631,11 +639,11 @@ class FunctionsTest extends \PHPUnit_Framework_TestCase
     public function testModifyRequestKeepInstanceOfRequest()
     {
         $r1 = new Psr7\Request('GET', 'http://foo.com');
-        $r2 = Psr7\modify_request($r1, ['remove_headers' => ['non-existent']]);
+        $r2 = Psr7\modify_request($r1, array('remove_headers' => array('non-existent')));
         $this->assertTrue($r2 instanceof Psr7\Request);
 
         $r1 = new Psr7\ServerRequest('GET', 'http://foo.com');
-        $r2 = Psr7\modify_request($r1, ['remove_headers' => ['non-existent']]);
+        $r2 = Psr7\modify_request($r1, array('remove_headers' => array('non-existent')));
         $this->assertTrue($r2 instanceof ServerRequestInterface);
     }
 }

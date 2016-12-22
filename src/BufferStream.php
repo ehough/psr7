@@ -1,5 +1,5 @@
 <?php
-namespace GuzzleHttp\Psr7;
+namespace Hough\Psr7;
 
 use Psr\Http\Message\StreamInterface;
 
@@ -132,6 +132,6 @@ class BufferStream implements StreamInterface
             return $this->hwm;
         }
 
-        return $key ? null : [];
+        return $key ? null : array();
     }
 }

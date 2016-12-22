@@ -1,5 +1,5 @@
 <?php
-namespace GuzzleHttp\Psr7;
+namespace Hough\Psr7;
 
 use Psr\Http\Message\StreamInterface;
 
@@ -7,10 +7,8 @@ use Psr\Http\Message\StreamInterface;
  * Stream decorator that can cache previously read bytes from a sequentially
  * read stream.
  */
-class CachingStream implements StreamInterface
+class CachingStream extends StreamDecorator
 {
-    use StreamDecoratorTrait;
-
     /** @var StreamInterface Stream being wrapped */
     private $remoteStream;
 
@@ -130,7 +128,7 @@ class CachingStream implements StreamInterface
 
     private function cacheEntireStream()
     {
-        $target = new FnStream(['write' => 'strlen']);
+        $target = new FnStream(array('write' => 'strlen'));
         copy_to_stream($this, $target);
 
         return $this->tell();

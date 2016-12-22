@@ -1,7 +1,7 @@
 <?php
-namespace GuzzleHttp\Tests\Psr7;
+namespace Hough\Tests\Psr7;
 
-use GuzzleHttp\Psr7\LazyOpenStream;
+use Hough\Psr7\LazyOpenStream;
 
 class LazyOpenStreamTest extends \PHPUnit_Framework_TestCase
 {

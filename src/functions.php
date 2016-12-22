@@ -1,5 +1,5 @@
 <?php
-namespace GuzzleHttp\Psr7;
+namespace Hough\Psr7;
 
 use Psr\Http\Message\MessageInterface;
 use Psr\Http\Message\RequestInterface;
@@ -75,7 +75,7 @@ function uri_for($uri)
  * @return Stream
  * @throws \InvalidArgumentException if the $resource arg is not valid.
  */
-function stream_for($resource = '', array $options = [])
+function stream_for($resource = '', array $options = array())
 {
     if (is_scalar($resource)) {
         $stream = fopen('php://temp', 'r+');
@@ -129,10 +129,10 @@ function stream_for($resource = '', array $options = [])
 function parse_header($header)
 {
     static $trimmed = "\"'  \n\t\r";
-    $params = $matches = [];
+    $params = $matches = array();
 
     foreach (normalize_header($header) as $val) {
-        $part = [];
+        $part = array();
         foreach (preg_split('/;(?=([^"]*"[^"]*")*[^"]*$)/', $val) as $kvp) {
             if (preg_match_all('/<[^>]+>|[^=]+/', $kvp, $matches)) {
                 $m = $matches[0];
@@ -165,7 +165,7 @@ function normalize_header($header)
         return array_map('trim', explode(',', $header));
     }
 
-    $result = [];
+    $result = array();
     foreach ($header as $value) {
         foreach ((array) $value as $v) {
             if (strpos($v, ',') === false) {
@@ -214,7 +214,7 @@ function modify_request(RequestInterface $request, array $changes)
             $changes['set_headers']['Host'] = $host;
 
             if ($port = $changes['uri']->getPort()) {
-                $standardPorts = ['http' => 80, 'https' => 443];
+                $standardPorts = array('http' => 80, 'https' => 443);
                 $scheme = $changes['uri']->getScheme();
                 if (isset($standardPorts[$scheme]) && $port != $standardPorts[$scheme]) {
                     $changes['set_headers']['Host'] .= ':'.$port;
@@ -296,11 +296,12 @@ function try_fopen($filename, $mode)
 {
     $ex = null;
     set_error_handler(function () use ($filename, $mode, &$ex) {
+        $args = func_get_args();
         $ex = new \RuntimeException(sprintf(
             'Unable to open %s using mode %s: %s',
             $filename,
             $mode,
-            func_get_args()[1]
+            $args[1]
         ));
     });
 
@@ -463,12 +464,17 @@ function readline(StreamInterface $stream, $maxLength = null)
 function parse_request($message)
 {
     $data = _parse_message($message);
-    $matches = [];
+    $matches = array();
     if (!preg_match('/^[\S]+\s+([a-zA-Z]+:\/\/|\/).*/', $data['start-line'], $matches)) {
         throw new \InvalidArgumentException('Invalid request string');
     }
     $parts = explode(' ', $data['start-line'], 3);
-    $version = isset($parts[2]) ? explode('/', $parts[2])[1] : '1.1';
+    if (isset($parts[2])) {
+        $exploded = explode('/', $parts[2]);
+        $version  = $exploded[1];
+    } else {
+        $version = '1.1';
+    }
 
     $request = new Request(
         $parts[0],
@@ -495,12 +501,13 @@ function parse_response($message)
         throw new \InvalidArgumentException('Invalid response string');
     }
     $parts = explode(' ', $data['start-line'], 3);
+    $exploded = explode('/', $parts[0]);
 
     return new Response(
         $parts[1],
         $data['headers'],
         $data['body'],
-        explode('/', $parts[0])[1],
+        $exploded[1],
         isset($parts[2]) ? $parts[2] : null
     );
 }
@@ -520,7 +527,7 @@ function parse_response($message)
  */
 function parse_query($str, $urlEncoding = true)
 {
-    $result = [];
+    $result = array();
 
     if ($str === '') {
         return $result;
@@ -546,7 +553,7 @@ function parse_query($str, $urlEncoding = true)
             $result[$key] = $value;
         } else {
             if (!is_array($result[$key])) {
-                $result[$key] = [$result[$key]];
+                $result[$key] = array($result[$key]);
             }
             $result[$key][] = $value;
         }
@@ -568,8 +575,16 @@ function parse_query($str, $urlEncoding = true)
  *                            to encode using RFC1738.
  * @return string
  */
-function build_query(array $params, $encoding = PHP_QUERY_RFC3986)
+function build_query(array $params, $encoding = 2) //2 = PHP_QUERY_RFC3986
 {
+    if (!defined('PHP_QUERY_RFC3986')) {
+        define('PHP_QUERY_RFC3986', 2);
+    }
+
+    if (!defined('PHP_QUERY_RFC1738')) {
+        define('PHP_QUERY_RFC1738', 1);
+    }
+
     if (!$params) {
         return '';
     }
@@ -629,7 +644,7 @@ function mimetype_from_filename($filename)
  */
 function mimetype_from_extension($extension)
 {
-    static $mimetypes = [
+    static $mimetypes = array(
         '7z' => 'application/x-7z-compressed',
         'aac' => 'audio/x-aac',
         'ai' => 'application/postscript',
@@ -728,7 +743,7 @@ function mimetype_from_extension($extension)
         'yaml' => 'text/yaml',
         'yml' => 'text/yaml',
         'zip' => 'application/zip',
-    ];
+    );
 
     $extension = strtolower($extension);
 
@@ -757,7 +772,7 @@ function _parse_message($message)
 
     // Iterate over each line in the message, accounting for line endings
     $lines = preg_split('/(\\r?\\n)/', $message, -1, PREG_SPLIT_DELIM_CAPTURE);
-    $result = ['start-line' => array_shift($lines), 'headers' => [], 'body' => ''];
+    $result = array('start-line' => array_shift($lines), 'headers' => array(), 'body' => '');
     array_shift($lines);
 
     for ($i = 0, $totalLines = count($lines); $i < $totalLines; $i += 2) {
@@ -809,7 +824,7 @@ function _parse_request_uri($path, array $headers)
 /** @internal */
 function _caseless_remove($keys, array $data)
 {
-    $result = [];
+    $result = array();
 
     foreach ($keys as &$key) {
         $key = strtolower($key);

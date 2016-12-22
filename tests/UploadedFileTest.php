@@ -1,12 +1,12 @@
 <?php
-namespace GuzzleHttp\Tests\Psr7;
+namespace Hough\Tests\Psr7;
 
 use ReflectionProperty;
-use GuzzleHttp\Psr7\Stream;
-use GuzzleHttp\Psr7\UploadedFile;
+use Hough\Psr7\Stream;
+use Hough\Psr7\UploadedFile;
 
 /**
- * @covers GuzzleHttp\Psr7\UploadedFile
+ * @covers Hough\Psr7\UploadedFile
  */
 class UploadedFileTest extends \PHPUnit_Framework_TestCase
 {
@@ -14,7 +14,7 @@ class UploadedFileTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->cleanup = [];
+        $this->cleanup = array();
     }
 
     public function tearDown()
@@ -28,15 +28,15 @@ class UploadedFileTest extends \PHPUnit_Framework_TestCase
 
     public function invalidStreams()
     {
-        return [
-            'null'         => [null],
-            'true'         => [true],
-            'false'        => [false],
-            'int'          => [1],
-            'float'        => [1.1],
-            'array'        => [['filename']],
-            'object'       => [(object) ['filename']],
-        ];
+        return array(
+            'null'         => array(null),
+            'true'         => array(true),
+            'false'        => array(false),
+            'int'          => array(1),
+            'float'        => array(1.1),
+            'array'        => array(array('filename')),
+            'object'       => array((object) array('filename')),
+        );
     }
 
     /**
@@ -51,12 +51,12 @@ class UploadedFileTest extends \PHPUnit_Framework_TestCase
 
     public function invalidSizes()
     {
-        return [
-            'null'   => [null],
-            'float'  => [1.1],
-            'array'  => [[1]],
-            'object' => [(object) [1]],
-        ];
+        return array(
+            'null'   => array(null),
+            'float'  => array(1.1),
+            'array'  => array(array(1)),
+            'object' => array((object) array(1)),
+        );
     }
 
     /**
@@ -71,17 +71,17 @@ class UploadedFileTest extends \PHPUnit_Framework_TestCase
 
     public function invalidErrorStatuses()
     {
-        return [
-            'null'     => [null],
-            'true'     => [true],
-            'false'    => [false],
-            'float'    => [1.1],
-            'string'   => ['1'],
-            'array'    => [[1]],
-            'object'   => [(object) [1]],
-            'negative' => [-1],
-            'too-big'  => [9],
-        ];
+        return array(
+            'null'     => array(null),
+            'true'     => array(true),
+            'false'    => array(false),
+            'float'    => array(1.1),
+            'string'   => array('1'),
+            'array'    => array(array(1)),
+            'object'   => array((object) array(1)),
+            'negative' => array(-1),
+            'too-big'  => array(9),
+        );
     }
 
     /**
@@ -96,14 +96,14 @@ class UploadedFileTest extends \PHPUnit_Framework_TestCase
 
     public function invalidFilenamesAndMediaTypes()
     {
-        return [
-            'true'   => [true],
-            'false'  => [false],
-            'int'    => [1],
-            'float'  => [1.1],
-            'array'  => [['string']],
-            'object' => [(object) ['string']],
-        ];
+        return array(
+            'true'   => array(true),
+            'false'  => array(false),
+            'int'    => array(1),
+            'float'  => array(1.1),
+            'array'  => array(array('string')),
+            'object' => array((object) array('string')),
+        );
     }
 
     /**
@@ -156,7 +156,7 @@ class UploadedFileTest extends \PHPUnit_Framework_TestCase
 
     public function testSuccessful()
     {
-        $stream = \GuzzleHttp\Psr7\stream_for('Foo bar!');
+        $stream = \Hough\Psr7\stream_for('Foo bar!');
         $upload = new UploadedFile($stream, $stream->getSize(), UPLOAD_ERR_OK, 'filename.txt', 'text/plain');
 
         $this->assertEquals($stream->getSize(), $upload->getSize());
@@ -171,16 +171,16 @@ class UploadedFileTest extends \PHPUnit_Framework_TestCase
 
     public function invalidMovePaths()
     {
-        return [
-            'null'   => [null],
-            'true'   => [true],
-            'false'  => [false],
-            'int'    => [1],
-            'float'  => [1.1],
-            'empty'  => [''],
-            'array'  => [['filename']],
-            'object' => [(object) ['filename']],
-        ];
+        return array(
+            'null'   => array(null),
+            'true'   => array(true),
+            'false'  => array(false),
+            'int'    => array(1),
+            'float'  => array(1.1),
+            'empty'  => array(''),
+            'array'  => array(array('filename')),
+            'object' => array((object) array('filename')),
+        );
     }
 
     /**
@@ -188,7 +188,7 @@ class UploadedFileTest extends \PHPUnit_Framework_TestCase
      */
     public function testMoveRaisesExceptionForInvalidPath($path)
     {
-        $stream = \GuzzleHttp\Psr7\stream_for('Foo bar!');
+        $stream = \Hough\Psr7\stream_for('Foo bar!');
         $upload = new UploadedFile($stream, 0, UPLOAD_ERR_OK);
 
         $this->cleanup[] = $path;
@@ -199,7 +199,7 @@ class UploadedFileTest extends \PHPUnit_Framework_TestCase
 
     public function testMoveCannotBeCalledMoreThanOnce()
     {
-        $stream = \GuzzleHttp\Psr7\stream_for('Foo bar!');
+        $stream = \Hough\Psr7\stream_for('Foo bar!');
         $upload = new UploadedFile($stream, 0, UPLOAD_ERR_OK);
 
         $this->cleanup[] = $to = tempnam(sys_get_temp_dir(), 'diac');
@@ -212,7 +212,7 @@ class UploadedFileTest extends \PHPUnit_Framework_TestCase
 
     public function testCannotRetrieveStreamAfterMove()
     {
-        $stream = \GuzzleHttp\Psr7\stream_for('Foo bar!');
+        $stream = \Hough\Psr7\stream_for('Foo bar!');
         $upload = new UploadedFile($stream, 0, UPLOAD_ERR_OK);
 
         $this->cleanup[] = $to = tempnam(sys_get_temp_dir(), 'diac');
@@ -225,15 +225,15 @@ class UploadedFileTest extends \PHPUnit_Framework_TestCase
 
     public function nonOkErrorStatus()
     {
-        return [
-            'UPLOAD_ERR_INI_SIZE'   => [ UPLOAD_ERR_INI_SIZE ],
-            'UPLOAD_ERR_FORM_SIZE'  => [ UPLOAD_ERR_FORM_SIZE ],
-            'UPLOAD_ERR_PARTIAL'    => [ UPLOAD_ERR_PARTIAL ],
-            'UPLOAD_ERR_NO_FILE'    => [ UPLOAD_ERR_NO_FILE ],
-            'UPLOAD_ERR_NO_TMP_DIR' => [ UPLOAD_ERR_NO_TMP_DIR ],
-            'UPLOAD_ERR_CANT_WRITE' => [ UPLOAD_ERR_CANT_WRITE ],
-            'UPLOAD_ERR_EXTENSION'  => [ UPLOAD_ERR_EXTENSION ],
-        ];
+        return array(
+            'UPLOAD_ERR_INI_SIZE'   => array( UPLOAD_ERR_INI_SIZE ),
+            'UPLOAD_ERR_FORM_SIZE'  => array( UPLOAD_ERR_FORM_SIZE ),
+            'UPLOAD_ERR_PARTIAL'    => array( UPLOAD_ERR_PARTIAL ),
+            'UPLOAD_ERR_NO_FILE'    => array( UPLOAD_ERR_NO_FILE ),
+            'UPLOAD_ERR_NO_TMP_DIR' => array( UPLOAD_ERR_NO_TMP_DIR ),
+            'UPLOAD_ERR_CANT_WRITE' => array( UPLOAD_ERR_CANT_WRITE ),
+            'UPLOAD_ERR_EXTENSION'  => array( UPLOAD_ERR_EXTENSION ),
+        );
     }
 
     /**

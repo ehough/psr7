@@ -1,5 +1,5 @@
 <?php
-namespace GuzzleHttp\Psr7;
+namespace Hough\Psr7;
 
 use Psr\Http\Message\StreamInterface;
 
@@ -7,10 +7,8 @@ use Psr\Http\Message\StreamInterface;
  * Lazily reads or writes to a file that is opened only after an IO operation
  * take place on the stream.
  */
-class LazyOpenStream implements StreamInterface
+class LazyOpenStream extends StreamDecorator
 {
-    use StreamDecoratorTrait;
-
     /** @var string File to open */
     private $filename;
 

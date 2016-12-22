@@ -1,5 +1,5 @@
 <?php
-namespace GuzzleHttp\Psr7;
+namespace Hough\Psr7;
 
 use InvalidArgumentException;
 use Psr\Http\Message\RequestInterface;
@@ -9,10 +9,8 @@ use Psr\Http\Message\UriInterface;
 /**
  * PSR-7 request implementation.
  */
-class Request implements RequestInterface
+class Request extends Message implements RequestInterface
 {
-    use MessageTrait;
-
     /** @var string */
     private $method;
 
@@ -32,7 +30,7 @@ class Request implements RequestInterface
     public function __construct(
         $method,
         $uri,
-        array $headers = [],
+        array $headers = array(),
         $body = null,
         $version = '1.1'
     ) {
@@ -137,6 +135,6 @@ class Request implements RequestInterface
         }
         // Ensure Host is the first header.
         // See: http://tools.ietf.org/html/rfc7230#section-5.4
-        $this->headers = [$header => [$host]] + $this->headers;
+        $this->headers = array($header => array($host)) + $this->headers;
     }
 }

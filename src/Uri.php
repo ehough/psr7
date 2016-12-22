@@ -1,5 +1,5 @@
 <?php
-namespace GuzzleHttp\Psr7;
+namespace Hough\Psr7;
 
 use Psr\Http\Message\UriInterface;
 
@@ -20,7 +20,7 @@ class Uri implements UriInterface
      */
     const HTTP_DEFAULT_HOST = 'localhost';
 
-    private static $defaultPorts = [
+    private static $defaultPorts = array(
         'http'  => 80,
         'https' => 443,
         'ftp' => 21,
@@ -32,11 +32,11 @@ class Uri implements UriInterface
         'imap' => 143,
         'pop' => 110,
         'ldap' => 389,
-    ];
+    );
 
     private static $charUnreserved = 'a-zA-Z0-9_\-\.~';
     private static $charSubDelims = '!\$&\'\(\)\*\+,;=';
-    private static $replaceQuery = ['=' => '%3D', '&' => '%26'];
+    private static $replaceQuery = array('=' => '%3D', '&' => '%26');
 
     /** @var string Uri scheme. */
     private $scheme = '';
@@ -66,9 +66,19 @@ class Uri implements UriInterface
     {
         // weak type check to also accept null until we can add scalar type hints
         if ($uri != '') {
+            $removeScheme = false;
+            if (strpos($uri, '//') === 0 && version_compare(PHP_VERSION, '5.4.7', '<')) {
+                $uri = "scheme:$uri";
+                $removeScheme = true;
+            }
             $parts = parse_url($uri);
+
             if ($parts === false) {
                 throw new \InvalidArgumentException("Unable to parse URI: $uri");
+            }
+
+            if ($removeScheme) {
+                unset($parts['scheme']);
             }
             $this->applyParts($parts);
         }
@@ -203,10 +213,11 @@ class Uri implements UriInterface
      */
     public static function isAbsolutePathReference(UriInterface $uri)
     {
+        $uriPath = $uri->getPath();
         return $uri->getScheme() === ''
             && $uri->getAuthority() === ''
-            && isset($uri->getPath()[0])
-            && $uri->getPath()[0] === '/';
+            && isset($uriPath[0])
+            && $uriPath[0] === '/';
     }
 
     /**
@@ -221,9 +232,10 @@ class Uri implements UriInterface
      */
     public static function isRelativePathReference(UriInterface $uri)
     {
+        $uriPath = $uri->getPath();
         return $uri->getScheme() === ''
             && $uri->getAuthority() === ''
-            && (!isset($uri->getPath()[0]) || $uri->getPath()[0] !== '/');
+            && (!isset($uriPath[0]) || $uriPath[0] !== '/');
     }
 
     /**
@@ -308,7 +320,8 @@ class Uri implements UriInterface
 
         $decodedKey = rawurldecode($key);
         $result = array_filter(explode('&', $current), function ($part) use ($decodedKey) {
-            return rawurldecode(explode('=', $part)[0]) !== $decodedKey;
+            $exploded = explode('=', $part);
+            return rawurldecode($exploded[0]) !== $decodedKey;
         });
 
         return $uri->withQuery(implode('&', $result));
@@ -334,11 +347,12 @@ class Uri implements UriInterface
         $current = $uri->getQuery();
 
         if ($current === '') {
-            $result = [];
+            $result = array();
         } else {
             $decodedKey = rawurldecode($key);
             $result = array_filter(explode('&', $current), function ($part) use ($decodedKey) {
-                return rawurldecode(explode('=', $part)[0]) !== $decodedKey;
+                $exploded = explode('=', $part);
+                return rawurldecode($exploded[0]) !== $decodedKey;
             });
         }
 
@@ -644,7 +658,7 @@ class Uri implements UriInterface
 
         return preg_replace_callback(
             '/(?:[^' . self::$charUnreserved . self::$charSubDelims . '%:@\/]++|%(?![A-Fa-f0-9]{2}))/',
-            [$this, 'rawurlencodeMatchZero'],
+            array($this, 'rawurlencodeMatchZero'),
             $path
         );
     }
@@ -666,7 +680,7 @@ class Uri implements UriInterface
 
         return preg_replace_callback(
             '/(?:[^' . self::$charUnreserved . self::$charSubDelims . '%:@\/\?]++|%(?![A-Fa-f0-9]{2}))/',
-            [$this, 'rawurlencodeMatchZero'],
+            array($this, 'rawurlencodeMatchZero'),
             $str
         );
     }
@@ -686,7 +700,8 @@ class Uri implements UriInterface
             if (0 === strpos($this->path, '//')) {
                 throw new \InvalidArgumentException('The path of a URI without an authority must not start with two slashes "//"');
             }
-            if ($this->scheme === '' && false !== strpos(explode('/', $this->path, 2)[0], ':')) {
+            $exploded = explode('/', $this->path, 2);
+            if ($this->scheme === '' && false !== strpos($exploded[0], ':')) {
                 throw new \InvalidArgumentException('A relative URI must not have a path beginning with a segment containing a colon');
             }
         } elseif (isset($this->path[0]) && $this->path[0] !== '/') {

@@ -1,5 +1,5 @@
 <?php
-namespace GuzzleHttp\Psr7;
+namespace Hough\Psr7;
 
 use Psr\Http\Message\StreamInterface;
 
@@ -14,10 +14,8 @@ use Psr\Http\Message\StreamInterface;
  * @link http://tools.ietf.org/html/rfc1952
  * @link http://php.net/manual/en/filters.compression.php
  */
-class InflateStream implements StreamInterface
+class InflateStream extends StreamDecorator
 {
-    use StreamDecoratorTrait;
-
     public function __construct(StreamInterface $stream)
     {
         // read the first 10 bytes, ie. gzip header

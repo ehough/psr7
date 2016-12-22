@@ -1,12 +1,12 @@
 <?php
-namespace GuzzleHttp\Tests\Psr7;
+namespace Hough\Tests\Psr7;
 
-use GuzzleHttp\Psr7;
-use GuzzleHttp\Psr7\CachingStream;
-use GuzzleHttp\Psr7\Stream;
+use Hough\Psr7;
+use Hough\Psr7\CachingStream;
+use Hough\Psr7\Stream;
 
 /**
- * @covers GuzzleHttp\Psr7\CachingStream
+ * @covers Hough\Psr7\CachingStream
  */
 class CachingStreamTest extends \PHPUnit_Framework_TestCase
 {
@@ -65,9 +65,9 @@ class CachingStreamTest extends \PHPUnit_Framework_TestCase
     public function testCanUseSeekEndWithUnknownSize()
     {
         $baseStream = Psr7\stream_for('testing');
-        $decorated = Psr7\FnStream::decorate($baseStream, [
+        $decorated = Psr7\FnStream::decorate($baseStream, array(
             'getSize' => function () { return null; }
-        ]);
+        ));
         $cached = new CachingStream($decorated);
         $cached->seek(-1, SEEK_END);
         $this->assertEquals('g', $cached->read(1));
@@ -76,7 +76,7 @@ class CachingStreamTest extends \PHPUnit_Framework_TestCase
     public function testRewindUsesSeek()
     {
         $a = Psr7\stream_for('foo');
-        $d = $this->getMockBuilder('GuzzleHttp\Psr7\CachingStream')
+        $d = $this->getMockBuilder('Hough\Psr7\CachingStream')
             ->setMethods(array('seek'))
             ->setConstructorArgs(array($a))
             ->getMock();
@@ -106,9 +106,9 @@ class CachingStreamTest extends \PHPUnit_Framework_TestCase
         fwrite($stream, 'testing');
         fseek($stream, 0);
 
-        $this->decorated = $this->getMockBuilder('\GuzzleHttp\Psr7\Stream')
-            ->setConstructorArgs([$stream])
-            ->setMethods(['read'])
+        $this->decorated = $this->getMockBuilder('\Hough\Psr7\Stream')
+            ->setConstructorArgs(array($stream))
+            ->setMethods(array('read'))
             ->getMock();
 
         $this->decorated->expects($this->exactly(2))
