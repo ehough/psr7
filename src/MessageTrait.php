@@ -9,10 +9,10 @@ use Psr\Http\Message\StreamInterface;
 trait MessageTrait
 {
     /** @var array Map of all registered headers, as original name => array of values */
-    private $headers = [];
+    private $headers = array();
 
     /** @var array Map of lowercase header name => original name at registration */
-    private $headerNames  = [];
+    private $headerNames  = array();
 
     /** @var string */
     private $protocol = '1.1';
@@ -51,7 +51,7 @@ trait MessageTrait
         $header = strtolower($header);
 
         if (!isset($this->headerNames[$header])) {
-            return [];
+            return array();
         }
 
         $header = $this->headerNames[$header];
@@ -142,7 +142,7 @@ trait MessageTrait
 
     private function setHeaders(array $headers)
     {
-        $this->headerNames = $this->headers = [];
+        $this->headerNames = $this->headers = array();
         foreach ($headers as $header => $value) {
             if (!is_array($value)) {
                 $value = [$value];

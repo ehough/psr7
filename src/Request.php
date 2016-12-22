@@ -32,7 +32,7 @@ class Request implements RequestInterface
     public function __construct(
         $method,
         $uri,
-        array $headers = [],
+        array $headers = array(),
         $body = null,
         $version = '1.1'
     ) {

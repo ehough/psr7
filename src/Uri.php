@@ -334,7 +334,7 @@ class Uri implements UriInterface
         $current = $uri->getQuery();
 
         if ($current === '') {
-            $result = [];
+            $result = array();
         } else {
             $decodedKey = rawurldecode($key);
             $result = array_filter(explode('&', $current), function ($part) use ($decodedKey) {

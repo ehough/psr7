@@ -25,7 +25,7 @@ class MultipartStream implements StreamInterface
      *
      * @throws \InvalidArgumentException
      */
-    public function __construct(array $elements = [], $boundary = null)
+    public function __construct(array $elements = array(), $boundary = null)
     {
         $this->boundary = $boundary ?: uniqid();
         $this->stream = $this->createStream($elements);
@@ -97,7 +97,7 @@ class MultipartStream implements StreamInterface
             $element['name'],
             $element['contents'],
             isset($element['filename']) ? $element['filename'] : null,
-            isset($element['headers']) ? $element['headers'] : []
+            isset($element['headers']) ? $element['headers'] : array()
         );
 
         $stream->addStream(stream_for($this->getHeaders($headers)));

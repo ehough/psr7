@@ -26,7 +26,7 @@ final class UriResolver
             return $path;
         }
 
-        $results = [];
+        $results = array();
         $segments = explode('/', $path);
         foreach ($segments as $segment) {
             if ($segment === '..') {

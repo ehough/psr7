@@ -48,7 +48,7 @@ class Stream implements StreamInterface
      *
      * @throws \InvalidArgumentException if the stream is not a stream resource
      */
-    public function __construct($stream, $options = [])
+    public function __construct($stream, $options = array())
     {
         if (!is_resource($stream)) {
             throw new \InvalidArgumentException('Stream must be a resource');
@@ -60,7 +60,7 @@ class Stream implements StreamInterface
 
         $this->customMetadata = isset($options['metadata'])
             ? $options['metadata']
-            : [];
+            : array();
 
         $this->stream = $stream;
         $meta = stream_get_meta_data($this->stream);
@@ -243,7 +243,7 @@ class Stream implements StreamInterface
     public function getMetadata($key = null)
     {
         if (!isset($this->stream)) {
-            return $key ? null : [];
+            return $key ? null : array();
         } elseif (!$key) {
             return $this->customMetadata + stream_get_meta_data($this->stream);
         } elseif (isset($this->customMetadata[$key])) {
