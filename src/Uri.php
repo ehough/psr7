@@ -20,7 +20,7 @@ class Uri implements UriInterface
      */
     const HTTP_DEFAULT_HOST = 'localhost';
 
-    private static $defaultPorts = [
+    private static $defaultPorts = array(
         'http'  => 80,
         'https' => 443,
         'ftp' => 21,
@@ -32,11 +32,11 @@ class Uri implements UriInterface
         'imap' => 143,
         'pop' => 110,
         'ldap' => 389,
-    ];
+    );
 
     private static $charUnreserved = 'a-zA-Z0-9_\-\.~';
     private static $charSubDelims = '!\$&\'\(\)\*\+,;=';
-    private static $replaceQuery = ['=' => '%3D', '&' => '%26'];
+    private static $replaceQuery = array('=' => '%3D', '&' => '%26');
 
     /** @var string Uri scheme. */
     private $scheme = '';

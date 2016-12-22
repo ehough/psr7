@@ -469,7 +469,12 @@ function parse_request($message)
         throw new \InvalidArgumentException('Invalid request string');
     }
     $parts = explode(' ', $data['start-line'], 3);
-    $version = isset($parts[2]) ? explode('/', $parts[2])[1] : '1.1';
+    if (isset($parts[2])) {
+        $exploded = explode('/', $parts[2]);
+        $version  = $exploded[1];
+    } else {
+        $version = '1.1';
+    }
 
     $request = new Request(
         $parts[0],
@@ -496,12 +501,13 @@ function parse_response($message)
         throw new \InvalidArgumentException('Invalid response string');
     }
     $parts = explode(' ', $data['start-line'], 3);
+    $exploded = explode('/', $parts[0]);
 
     return new Response(
         $parts[1],
         $data['headers'],
         $data['body'],
-        explode('/', $parts[0])[1],
+        $exploded[1],
         isset($parts[2]) ? $parts[2] : null
     );
 }

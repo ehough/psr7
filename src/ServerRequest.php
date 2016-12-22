@@ -140,13 +140,13 @@ class ServerRequest extends Request implements ServerRequestInterface
         $normalizedFiles = array();
 
         foreach (array_keys($files['tmp_name']) as $key) {
-            $spec = [
+            $spec = array(
                 'tmp_name' => $files['tmp_name'][$key],
                 'size'     => $files['size'][$key],
                 'error'    => $files['error'][$key],
                 'name'     => $files['name'][$key],
                 'type'     => $files['type'][$key],
-            ];
+            );
             $normalizedFiles[$key] = self::createUploadedFileFromSpec($spec);
         }
 
