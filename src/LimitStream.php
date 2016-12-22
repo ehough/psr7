@@ -7,7 +7,7 @@ use Psr\Http\Message\StreamInterface;
 /**
  * Decorator used to return only a subset of a stream
  */
-class LimitStream extends StreamDecorator implements StreamInterface
+class LimitStream extends StreamDecorator
 {
     /** @var int Offset to start reading from */
     private $offset;

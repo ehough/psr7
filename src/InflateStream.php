@@ -14,7 +14,7 @@ use Psr\Http\Message\StreamInterface;
  * @link http://tools.ietf.org/html/rfc1952
  * @link http://php.net/manual/en/filters.compression.php
  */
-class InflateStream extends StreamDecorator implements StreamInterface
+class InflateStream extends StreamDecorator
 {
     public function __construct(StreamInterface $stream)
     {

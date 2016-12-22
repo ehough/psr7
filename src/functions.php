@@ -214,7 +214,7 @@ function modify_request(RequestInterface $request, array $changes)
             $changes['set_headers']['Host'] = $host;
 
             if ($port = $changes['uri']->getPort()) {
-                $standardPorts = ['http' => 80, 'https' => 443];
+                $standardPorts = array('http' => 80, 'https' => 443);
                 $scheme = $changes['uri']->getScheme();
                 if (isset($standardPorts[$scheme]) && $port != $standardPorts[$scheme]) {
                     $changes['set_headers']['Host'] .= ':'.$port;
@@ -296,11 +296,12 @@ function try_fopen($filename, $mode)
 {
     $ex = null;
     set_error_handler(function () use ($filename, $mode, &$ex) {
+        $args = func_get_args();
         $ex = new \RuntimeException(sprintf(
             'Unable to open %s using mode %s: %s',
             $filename,
             $mode,
-            func_get_args()[1]
+            $args[1]
         ));
     });
 
@@ -546,7 +547,7 @@ function parse_query($str, $urlEncoding = true)
             $result[$key] = $value;
         } else {
             if (!is_array($result[$key])) {
-                $result[$key] = [$result[$key]];
+                $result[$key] = array($result[$key]);
             }
             $result[$key][] = $value;
         }
@@ -629,7 +630,7 @@ function mimetype_from_filename($filename)
  */
 function mimetype_from_extension($extension)
 {
-    static $mimetypes = [
+    static $mimetypes = array(
         '7z' => 'application/x-7z-compressed',
         'aac' => 'audio/x-aac',
         'ai' => 'application/postscript',
@@ -728,7 +729,7 @@ function mimetype_from_extension($extension)
         'yaml' => 'text/yaml',
         'yml' => 'text/yaml',
         'zip' => 'application/zip',
-    ];
+    );
 
     $extension = strtolower($extension);
 
@@ -757,7 +758,7 @@ function _parse_message($message)
 
     // Iterate over each line in the message, accounting for line endings
     $lines = preg_split('/(\\r?\\n)/', $message, -1, PREG_SPLIT_DELIM_CAPTURE);
-    $result = ['start-line' => array_shift($lines), 'headers' => array(), 'body' => ''];
+    $result = array('start-line' => array_shift($lines), 'headers' => array(), 'body' => '');
     array_shift($lines);
 
     for ($i = 0, $totalLines = count($lines); $i < $totalLines; $i += 2) {

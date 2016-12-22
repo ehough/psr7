@@ -7,7 +7,7 @@ use Psr\Http\Message\StreamInterface;
  * Stream decorator that can cache previously read bytes from a sequentially
  * read stream.
  */
-class CachingStream extends StreamDecorator implements StreamInterface
+class CachingStream extends StreamDecorator
 {
     /** @var StreamInterface Stream being wrapped */
     private $remoteStream;

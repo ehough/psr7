@@ -7,7 +7,7 @@ use Psr\Http\Message\StreamInterface;
  * Lazily reads or writes to a file that is opened only after an IO operation
  * take place on the stream.
  */
-class LazyOpenStream extends StreamDecorator implements StreamInterface
+class LazyOpenStream extends StreamDecorator
 {
     /** @var string File to open */
     private $filename;

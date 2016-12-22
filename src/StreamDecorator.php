@@ -7,7 +7,7 @@ use Psr\Http\Message\StreamInterface;
  * Stream decorator
  * @property StreamInterface stream
  */
-class StreamDecorator
+abstract class StreamDecorator implements StreamInterface
 {
     /**
      * @param StreamInterface $stream Stream to decorate

@@ -7,7 +7,7 @@ use Psr\Http\Message\StreamInterface;
  * Stream decorator that begins dropping data once the size of the underlying
  * stream becomes too full.
  */
-class DroppingStream extends StreamDecorator implements StreamInterface
+class DroppingStream extends StreamDecorator
 {
     private $maxLength;
 

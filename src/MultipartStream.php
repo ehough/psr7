@@ -7,7 +7,7 @@ use Psr\Http\Message\StreamInterface;
  * Stream that when read returns bytes for a streaming multipart or
  * multipart/form-data stream.
  */
-class MultipartStream extends StreamDecorator implements StreamInterface
+class MultipartStream extends StreamDecorator
 {
     private $boundary;
 
