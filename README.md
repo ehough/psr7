@@ -1,5 +1,9 @@
 # ehough/psr7
 
+[![Build Status](https://travis-ci.org/guzzle/guzzle-services.svg?branch=develop)](https://travis-ci.org/ehough/promises)
+[![Latest Stable Version](https://poser.pugx.org/ehough/promises/v/stable)](https://packagist.org/packages/ehough/promises)
+[![License](https://poser.pugx.org/ehough/promises/license)](https://packagist.org/packages/ehough/promises)
+
 A PHP 5.3-compatible fork of [`guzzle/psr7`](https://github.com/guzzle/psr7).
 
 # Why?
