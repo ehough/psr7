@@ -4,10 +4,10 @@ namespace GuzzleHttp\Psr7;
 use Psr\Http\Message\StreamInterface;
 
 /**
- * Stream decorator trait
+ * Stream decorator
  * @property StreamInterface stream
  */
-trait StreamDecoratorTrait
+class StreamDecorator
 {
     /**
      * @param StreamInterface $stream Stream to decorate
@@ -65,7 +65,7 @@ trait StreamDecoratorTrait
      */
     public function __call($method, array $args)
     {
-        $result = call_user_func_array([$this->stream, $method], $args);
+        $result = call_user_func_array(array($this->stream, $method), $args);
 
         // Always return the wrapped object if the result is a return $this
         return $result === $this->stream ? $this : $result;
