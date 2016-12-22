@@ -79,7 +79,7 @@ class MultipartStream extends StreamDecorator
 
     private function addElement(AppendStream $stream, array $element)
     {
-        foreach (['contents', 'name'] as $key) {
+        foreach (array('contents', 'name') as $key) {
             if (!array_key_exists($key, $element)) {
                 throw new \InvalidArgumentException("A '{$key}' key is required");
             }
@@ -137,7 +137,7 @@ class MultipartStream extends StreamDecorator
             }
         }
 
-        return [$stream, $headers];
+        return array($stream, $headers);
     }
 
     private function getHeader(array $headers, $key)

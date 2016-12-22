@@ -128,7 +128,7 @@ class CachingStream extends StreamDecorator
 
     private function cacheEntireStream()
     {
-        $target = new FnStream(['write' => 'strlen']);
+        $target = new FnStream(array('write' => 'strlen'));
         copy_to_stream($this, $target);
 
         return $this->tell();

@@ -6,6 +6,14 @@ use GuzzleHttp\Psr7\FnStream;
 use GuzzleHttp\Psr7\NoSeekStream;
 use Psr\Http\Message\ServerRequestInterface;
 
+if (!defined('PHP_QUERY_RFC3986')) {
+    define('PHP_QUERY_RFC3986', 2);
+}
+
+if (!defined('PHP_QUERY_RFC1738')) {
+    define('PHP_QUERY_RFC1738', 1);
+}
+
 class FunctionsTest extends \PHPUnit_Framework_TestCase
 {
     public function testCopiesToString()

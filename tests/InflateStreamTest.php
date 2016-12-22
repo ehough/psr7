@@ -34,6 +34,7 @@ class InflateStreamtest extends \PHPUnit_Framework_TestCase
         $filename = '64756d6d7900';
         $rest = substr($gzipped, 20);
 
-        return hex2bin($header . $filename . $rest);
+        //http://php.net/manual/en/function.bin2hex.php#93328
+        return pack('H*' , $header . $filename . $rest);
     }
 }

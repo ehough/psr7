@@ -575,8 +575,16 @@ function parse_query($str, $urlEncoding = true)
  *                            to encode using RFC1738.
  * @return string
  */
-function build_query(array $params, $encoding = PHP_QUERY_RFC3986)
+function build_query(array $params, $encoding = 2) //2 = PHP_QUERY_RFC3986
 {
+    if (!defined('PHP_QUERY_RFC3986')) {
+        define('PHP_QUERY_RFC3986', 2);
+    }
+
+    if (!defined('PHP_QUERY_RFC1738')) {
+        define('PHP_QUERY_RFC1738', 1);
+    }
+
     if (!$params) {
         return '';
     }
