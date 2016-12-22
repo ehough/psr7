@@ -40,7 +40,7 @@ class PumpStream implements StreamInterface
      *                         - metadata: Hash of metadata to use with stream.
      *                         - size: Size of the stream, if known.
      */
-    public function __construct(callable $source, array $options = array())
+    public function __construct($source, array $options = array())
     {
         $this->source = $source;
         $this->size = isset($options['size']) ? $options['size'] : null;

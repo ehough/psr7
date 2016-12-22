@@ -66,6 +66,9 @@ class Uri implements UriInterface
     {
         // weak type check to also accept null until we can add scalar type hints
         if ($uri != '') {
+            if (strpos($uri, '//') === 0 && version_compare(PHP_VERSION, '5.4.7', '<')) {
+                $uri = substr($uri, 2);
+            }
             $parts = parse_url($uri);
             if ($parts === false) {
                 throw new \InvalidArgumentException("Unable to parse URI: $uri");
