@@ -109,25 +109,29 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
 
     public function testWithStatusCodeAndNoReason()
     {
-        $r = (new Response())->withStatus(201);
+        $r = new Response();
+        $r = $r->withStatus(201);
         $this->assertSame(201, $r->getStatusCode());
         $this->assertSame('Created', $r->getReasonPhrase());
     }
 
     public function testWithStatusCodeAndReason()
     {
-        $r = (new Response())->withStatus(201, 'Foo');
+        $r = new Response();
+        $r = $r->withStatus(201, 'Foo');
         $this->assertSame(201, $r->getStatusCode());
         $this->assertSame('Foo', $r->getReasonPhrase());
 
-        $r = (new Response())->withStatus(201, '0');
+        $r = new Response();
+        $r = $r->withStatus(201, '0');
         $this->assertSame(201, $r->getStatusCode());
         $this->assertSame('0', $r->getReasonPhrase(), 'Falsey reason works');
     }
 
     public function testWithProtocolVersion()
     {
-        $r = (new Response())->withProtocolVersion('1000');
+        $r = new Response();
+        $r = $r->withProtocolVersion('1000');
         $this->assertSame('1000', $r->getProtocolVersion());
     }
 
@@ -140,7 +144,8 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
     public function testWithBody()
     {
         $b = Psr7\stream_for('0');
-        $r = (new Response())->withBody($b);
+        $r = new Response();
+        $r = $r->withBody($b);
         $this->assertInstanceOf('Psr\Http\Message\StreamInterface', $r->getBody());
         $this->assertSame('0', (string) $r->getBody());
     }
@@ -240,8 +245,10 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
     public function testHeaderValuesAreTrimmed()
     {
         $r1 = new Response(200, array('OWS' => " \t \tFoo\t \t "));
-        $r2 = (new Response())->withHeader('OWS', " \t \tFoo\t \t ");
-        $r3 = (new Response())->withAddedHeader('OWS', " \t \tFoo\t \t ");;
+        $r2 = new Response();
+        $r2 = $r2->withHeader('OWS', " \t \tFoo\t \t ");
+        $r3 = new Response();
+        $r3 = $r3->withAddedHeader('OWS', " \t \tFoo\t \t ");;
 
         foreach (array($r1, $r2, $r3) as $r) {
             $this->assertSame(array('OWS' => array('Foo')), $r->getHeaders());
