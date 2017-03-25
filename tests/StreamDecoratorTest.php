@@ -22,7 +22,7 @@ class StreamDecoratorTest extends \PHPUnit_Framework_TestCase
     /** @var resource */
     private $c;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->c = fopen('php://temp', 'r+');
         fwrite($this->c, 'foo');
