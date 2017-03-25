@@ -17,7 +17,7 @@ class Request extends Message implements RequestInterface
     /** @var null|string */
     private $requestTarget;
 
-    /** @var null|UriInterface */
+    /** @var UriInterface */
     private $uri;
 
     /**
